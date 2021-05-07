@@ -35,6 +35,13 @@ const CompanyQuery = extendType({
 export const UserQuery = extendType({
   type: 'Query',
   definition(t) {
+    t.nullable.list.field('addresses', {
+      type: 'Address',
+      resolve(_root, _args, ctx) {
+        return ctx.db.address.findMany();
+      },
+    })
+
     t.field('me', {
       type: 'User',
       resolve: (_parent, _args, ctx) => {

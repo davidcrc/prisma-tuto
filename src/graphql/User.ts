@@ -5,9 +5,7 @@ import { objectType } from 'nexus'
 export const User = objectType({
   name: 'User',
   definition(t) {
-    t.nonNull.field('id', {
-      type: 'Int',
-    })
+    t.nonNull.int('id')
     t.nullable.string('firstName')
     t.nullable.string('lastName')
     t.nonNull.string('email')
@@ -23,12 +21,12 @@ export const User = objectType({
 
     t.nullable.boolean('isBroker')
     t.nullable.int('signInCount')
-    // t.nullable.field('currentSignInAt', {
-    //   type: 'DateTime',
-    // })
-    // t.nullable.field('acceptedDisclaimerAt', {
-    //   type: 'DateTime',
-    // })
+    t.nullable.field('currentSignInAt', {
+      type: 'DateTime',
+    })
+    t.nullable.field('acceptedDisclaimerAt', {
+      type: 'DateTime',
+    })
     t.nullable.int('personType')
     t.nullable.int('accountType')
 

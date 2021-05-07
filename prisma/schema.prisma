@@ -45,6 +45,673 @@ model Skill {
 
 //  My CODE
 
+model ActiveStorageAttachment {
+  id         Int   @id @default(autoincrement())
+  name       String   @db.VarChar
+  recordType String   @map("record_type") @db.VarChar
+  record     Int   @map("record_id")
+  blob       Int   @map("blob_id")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  @@unique([recordType, record, name, blob], name: "index_active_storage_attachments_uniqueness")
+  @@index([blob], name: "index_active_storage_attachments_on_blob_id")
+  @@map("active_storage_attachments")
+}
+
+model ActiveStorageBlob {
+  id          Int   @id @default(autoincrement())
+  key         String   @unique @db.VarChar
+  filename    String   @db.VarChar
+  contentType String?  @map("content_type") @db.VarChar
+  metadata    String?
+  byteSize    Int   @map("byte_size")
+  checksum    String   @db.VarChar
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  @@map("active_storage_blobs")
+}
+
+model Address {
+  id                Int              @id @default(autoincrement())
+  lineOne           String?             @map("line_one") @db.VarChar
+  lineTwo           String?             @map("line_two") @db.VarChar
+  city              String?             @map("city_old") @db.VarChar
+  state_old         String?             @db.VarChar
+  zip               String?             @db.VarChar
+  county_old        String?             @db.VarChar
+  lat               Decimal?            @db.Decimal(13, 8)
+  lng               Decimal?            @db.Decimal(13, 8)
+  placeCode         String?             @map("place_code_old") @db.VarChar
+  countryCode       String?             @map("country_code_old") @db.VarChar
+  stateCode         String?             @map("state_code_old") @db.VarChar
+  countyCode        String?             @map("county_code_old") @db.VarChar
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime            @updatedAt @map("updated_at") @db.Timestamp(6)
+  country           Int?             @map("country_id")
+  state             Int?             @map("state_id")
+  county            Int?             @map("county_id")
+  place             Int?             @map("place_id")
+  Country           Country?            @relation(fields: [country], references: [id])
+  County            County?             @relation(fields: [county], references: [id])
+  Place             Place?              @relation(fields: [place], references: [id])
+  State             State?              @relation(fields: [state], references: [id])
+  Building          Building[]
+  LeasableUnit      LeasableUnit[]
+  OperatingLocation OperatingLocation[]
+  Organization      Organization[]
+  Parcel            Parcel[]
+  User              User[]
+
+  @@index([country], name: "index_addresses_on_country_id")
+  @@index([county], name: "index_addresses_on_county_id")
+  @@index([place], name: "index_addresses_on_place_id")
+  @@index([state], name: "index_addresses_on_state_id")
+  @@map("addresses")
+}
+
+model Agent {
+  id           Int        @id @default(autoincrement())
+  leasableUnit Int?       @map("leasable_unit_id")
+  createdAt    DateTime      @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  user         Int?       @map("user_id")
+  LeasableUnit LeasableUnit? @relation(fields: [leasableUnit], references: [id])
+  User         User?         @relation(fields: [user], references: [id])
+
+  @@index([leasableUnit], name: "index_agents_on_leasable_unit_id")
+  @@index([user], name: "index_agents_on_user_id")
+  @@map("agents")
+}
+
+model ArInternalMetadatum {
+  key       String   @id @default(cuid()) @db.VarChar(30)
+  value     String?  @db.VarChar
+  createdAt DateTime @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@map("ar_internal_metadata")
+}
+
+model Building {
+  id                    Int             @id @default(autoincrement())
+  name                  String?            @db.VarChar
+  address               Int?            @map("address_id")
+  parcel                Int?            @map("parcel_id")
+  date_constructed      DateTime?          @db.Date
+  totalSquareFeet       Int?               @map("total_square_feet")
+  totalUsableSquareFeet Int?               @map("total_usable_square_feet")
+  loadFactor            Decimal?           @map("load_factor") @db.Decimal
+  constructionType      Int?               @map("construction_type")
+  insuranceLocation     Int?            @map("insurance_location_id")
+  createdAt             DateTime           @map("created_at") @db.Timestamp(6)
+  updatedAt             DateTime           @map("updated_at") @db.Timestamp(6)
+  propertyId            Int?            @map("property_id")
+  Address               Address?           @relation(fields: [address], references: [id])
+  InsuranceLocation     InsuranceLocation? @relation(fields: [insuranceLocation], references: [id])
+  Parcel                Parcel?            @relation(fields: [parcel], references: [id])
+  Floor                 Floor[]
+  LeasableUnit          LeasableUnit[]
+
+  @@index([address], name: "index_buildings_on_address_id")
+  @@index([insuranceLocation], name: "index_buildings_on_insurance_location_id")
+  @@index([parcel], name: "index_buildings_on_parcel_id")
+  @@index([propertyId], name: "index_buildings_on_property_id")
+  @@map("buildings")
+}
+
+model County {
+  id         Int    @id @default(autoincrement())
+  name       String    @db.VarChar
+  fipsCode   Int       @map("fips_code")
+  state      Int?   @map("state_id")
+  created_at DateTime  @db.Timestamp(6)
+  updated_at DateTime  @db.Timestamp(6)
+  State      State?    @relation(fields: [state], references: [id])
+  Address    Address[]
+
+  @@index([state], name: "index_counties_on_state_id")
+  @@map("counties")
+}
+
+model Country {
+  id         Int    @id @default(autoincrement())
+  name       String    @db.VarChar(100)
+  fipsCode   String[]  @map("fips_code")
+  shortCode  String?   @map("short_code") @db.VarChar(2)
+  longCode   String?   @map("long_code") @db.VarChar(3)
+  created_at DateTime  @db.Timestamp(6)
+  updated_at DateTime  @db.Timestamp(6)
+  Address    Address[]
+  State      State[]
+
+  @@map("countries")
+}
+
+model DataImport {
+  id         Int   @id @default(autoincrement())
+  user       Int?  @map("user_id")
+  file       String?  @db.VarChar
+  importType Int?     @map("import_type")
+  succeeded  Boolean?
+  message    String?  @db.VarChar
+  createdAt  DateTime @map("created_at") @db.Timestamp(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+  User       User?    @relation(fields: [user], references: [id])
+
+  @@index([user], name: "index_data_imports_on_user_id")
+  @@map("data_imports")
+}
+
+model DemographicRequirement {
+  id                          Int         @id @default(autoincrement())
+  populationCount             Int?           @map("population_count")
+  populationCountRadiusMiles  Decimal?       @map("population_count_radius_miles") @db.Decimal
+  houselholdCount             Int?           @map("houselhold_count")
+  householdCountRadiusMiles   Decimal?       @map("household_count_radius_miles") @db.Decimal
+  daytimeEmployeesCount       Int?           @map("daytime_employees_count")
+  daytimeEmployeesRadiusMiles Decimal?       @map("daytime_employees_radius_miles") @db.Decimal
+  ageRange                    String?        @map("age_range") @db.VarChar
+  avgHouseholdIncome          Int?           @map("avg_household_income")
+  Organization                Organization[]
+
+  @@map("demographic_requirements")
+}
+
+model Floor {
+  id                    Int         @id @default(autoincrement())
+  building              Int?        @map("building_id")
+  name                  String?        @db.VarChar
+  lat                   Decimal?       @db.Decimal(13, 8)
+  lng                   Decimal?       @db.Decimal(13, 8)
+  totalSquareFeet       Int?           @map("total_square_feet")
+  totalUsableSquareFeet Int?           @map("total_usable_square_feet")
+  createdAt             DateTime       @map("created_at") @db.Timestamp(6)
+  updatedAt             DateTime       @map("updated_at") @db.Timestamp(6)
+  businessKey           String?        @map("business_key") @db.VarChar
+  propertyId            Int?        @map("property_id")
+  Building              Building?      @relation(fields: [building], references: [id])
+  LeasableUnit          LeasableUnit[]
+
+  @@index([building], name: "index_floors_on_building_id")
+  @@index([propertyId], name: "index_floors_on_property_id")
+  @@map("floors")
+}
+
+model InsuranceLocation {
+  id                Int       @id @default(autoincrement())
+  businessKey       String?      @map("business_key") @db.VarChar
+  entityBusinessKey String?      @map("entity_business_key") @db.VarChar
+  legalEntity       Int?      @map("legal_entity_id")
+  createdAt         DateTime     @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime     @updatedAt @map("updated_at") @db.Timestamp(6)
+  description       String?      @db.VarChar
+  addressString     String?      @map("address_string") @db.VarChar
+  LegalEntity       LegalEntity? @relation(fields: [legalEntity], references: [id])
+  Building          Building[]
+  Parcel            Parcel[]
+
+  @@index([legalEntity], name: "index_insurance_locations_on_legal_entity_id")
+  @@map("insurance_locations")
+}
+
+model LeasableUnitSubType {
+  id               Int            @id @default(autoincrement())
+  name             String?           @db.VarChar
+  leasableUnitType Int?           @map("leasable_unit_type_id")
+  createdAt        DateTime          @map("created_at") @db.Timestamp(6)
+  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamp(6)
+  LeasableUnitType LeasableUnitType? @relation(fields: [leasableUnitType], references: [id])
+  LeasableUnit     LeasableUnit[]
+
+  @@index([leasableUnitType], name: "index_leasable_unit_sub_types_on_leasable_unit_type_id")
+  @@map("leasable_unit_sub_types")
+}
+
+model LeasableUnitType {
+  id                  Int                @id @default(autoincrement())
+  name                String?               @db.VarChar
+  createdAt           DateTime              @map("created_at") @db.Timestamp(6)
+  updatedAt           DateTime              @updatedAt @map("updated_at") @db.Timestamp(6)
+  LeasableUnitSubType LeasableUnitSubType[]
+  LeasableUnit        LeasableUnit[]
+
+  @@map("leasable_unit_types")
+}
+
+model LeasableUnit {
+  id                           Int               @id @default(autoincrement())
+  businessKey                  String?              @map("business_key") @db.VarChar
+  floor                        Int?              @map("floor_id")
+  building                     Int?              @map("building_id")
+  parcel                       Int?              @map("parcel_id")
+  property                     Int?              @map("property_id")
+  squareFeet                   Int?                 @map("square_feet")
+  squareFeetIsEstimate         Boolean?             @map("square_feet_is_estimate")
+  occupancyStatus              Int?                 @map("occupancy_status")
+  address                      Int?              @map("address_id")
+  isAnchor                     Boolean?             @map("is_anchor")
+  hasDriveThru                 Boolean?             @map("has_drive_thru")
+  hasGreaseTrap                Boolean?             @map("has_grease_trap")
+  suiteNumber                  String?              @map("suite_number") @db.VarChar
+  occupantName                 String?              @map("occupant_name") @db.VarChar
+  current_firm_term_expiration DateTime?            @db.Date
+  rent_commencement_date       DateTime?            @db.Date
+  squareFootCost               Decimal?             @map("square_foot_cost") @db.Decimal(8, 2)
+  monthlyCost                  Decimal?             @map("monthly_cost") @db.Decimal(8, 2)
+  yearlyCost                   Decimal?             @map("yearly_cost") @db.Decimal(11, 2)
+  entityBusinessKey            String?              @map("entity_business_key") @db.VarChar
+  createdAt                    DateTime             @map("created_at") @db.Timestamp(6)
+  updatedAt                    DateTime             @map("updated_at") @db.Timestamp(6)
+  insuranceLocationId          Int?              @map("insurance_location_id")
+  leasableUnitType             Int?              @map("leasable_unit_type_id")
+  leasableUnitSubType          Int?              @map("leasable_unit_sub_type_id")
+  isInPortfolio                Boolean?             @map("is_in_portfolio")
+  markForRemove                Boolean?             @map("mark_for_remove")
+  baseRent                     Decimal?             @map("asking_base_rent_per_sqtf_per_year") @db.Decimal
+  nnnRent                      Decimal?             @map("nnn_rent_per_sqft_per_year") @db.Decimal
+  totalRent                    Decimal?             @map("total_rent_per_sqft_per_year") @db.Decimal
+  dateAvailable                DateTime?            @map("date_available") @db.Timestamp(6)
+  es_internal_notes            String?
+  externalNotes                String?              @map("external_notes")
+  name                         String?              @db.VarChar
+  ceilingHeightInches          Int?                 @map("ceiling_height_inches")
+  hasDockDoor                  Boolean?             @map("has_dock_door")
+  organization                 Int?              @map("organization_id")
+  productType                  Int?              @map("product_type_id")
+  isListed                     Boolean              @map("is_listed")
+  renderUrl                    String?              @map("render_url") @db.VarChar
+  description                  String?              @db.VarChar
+  internal_notes               String?
+  Address                      Address?             @relation(fields: [address], references: [id])
+  Building                     Building?            @relation(fields: [building], references: [id])
+  Floor                        Floor?               @relation(fields: [floor], references: [id])
+  LeasableUnitSubType          LeasableUnitSubType? @relation(fields: [leasableUnitSubType], references: [id])
+  LeasableUnitType             LeasableUnitType?    @relation(fields: [leasableUnitType], references: [id])
+  Organization                 Organization?        @relation(fields: [organization], references: [id])
+  Parcel                       Parcel?              @relation(fields: [parcel], references: [id])
+  ProductType                  ProductType?         @relation(fields: [productType], references: [id])
+  Property                     Property?            @relation(fields: [property], references: [id])
+  Agent                        Agent[]
+  Lease                        Lease[]
+
+  @@index([address], name: "index_leasable_units_on_address_id")
+  @@index([building], name: "index_leasable_units_on_building_id")
+  @@index([floor], name: "index_leasable_units_on_floor_id")
+  @@index([insuranceLocationId], name: "index_leasable_units_on_insurance_location_id")
+  @@index([leasableUnitSubType], name: "index_leasable_units_on_leasable_unit_sub_type_id")
+  @@index([leasableUnitType], name: "index_leasable_units_on_leasable_unit_type_id")
+  @@index([organization], name: "index_leasable_units_on_organization_id")
+  @@index([parcel], name: "index_leasable_units_on_parcel_id")
+  @@index([productType], name: "index_leasable_units_on_product_type_id")
+  @@index([property], name: "index_leasable_units_on_property_id")
+  @@map("leasable_units")
+}
+
+model LeaseRequirement {
+  id                       Int         @id @default(autoincrement())
+  initialTermMonths        Int?           @map("initial_term_months")
+  numberAndLenghtOfOptions String?        @map("number_and_lenght_of_options") @db.VarChar
+  useExpression            String?        @map("use_expression") @db.VarChar
+  exclusiveUseRequired     String?        @map("exclusive_use_required") @db.VarChar
+  signage                  String?        @db.VarChar
+  Organization             Organization[]
+
+  @@map("lease_requirements")
+}
+
+model Lease {
+  id                Int             @id @default(autoincrement())
+  operatingLocation Int?            @map("operating_location_id")
+  rent              Decimal?           @db.Decimal
+  leaseType         Int?               @map("lease_type")
+  createdAt         DateTime           @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime           @updatedAt @map("updated_at") @db.Timestamp(6)
+  start_date        DateTime?          @db.Date
+  end_date          DateTime?          @db.Date
+  squareFootage     Int?               @map("square_footage")
+  property          Int?            @map("property_id")
+  leasableUnit      Int?            @map("leasable_unit_id")
+  LeasableUnit      LeasableUnit?      @relation(fields: [leasableUnit], references: [id])
+  OperatingLocation OperatingLocation? @relation(fields: [operatingLocation], references: [id])
+  Property          Property?          @relation(fields: [property], references: [id])
+
+  @@index([leasableUnit], name: "index_leases_on_leasable_unit_id")
+  @@index([operatingLocation], name: "index_leases_on_operating_location_id")
+  @@index([property], name: "index_leases_on_property_id")
+  @@map("leases")
+}
+
+model LegalEntity {
+  id                Int              @id @default(autoincrement())
+  businessKey       String?             @map("business_key") @db.VarChar
+  name              String?             @db.VarChar
+  createdAt         DateTime            @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime            @updatedAt @map("updated_at") @db.Timestamp(6)
+  InsuranceLocation InsuranceLocation[]
+
+  @@map("legal_entities")
+}
+
+model OperatingLocation {
+  id                                                                     Int        @id @default(autoincrement())
+  createdAt                                                              DateTime      @map("created_at") @db.Timestamp(6)
+  updatedAt                                                              DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  name                                                                   String?       @db.VarChar
+  phone                                                                  String?       @db.VarChar
+  website                                                                String?       @db.VarChar
+  address                                                                Int?       @map("address_id")
+  brandLocationNumber                                                    String?       @map("brand_location_number") @db.VarChar
+  tenantLocationNumber                                                   String?       @map("tenant_location_number") @db.VarChar
+  brandOrganization                                                      Int?       @map("brand_organization_id")
+  tenantOrganization                                                     Int?       @map("tenant_organization_id")
+  Address                                                                Address?      @relation(fields: [address], references: [id])
+  Organization_operating_locations_brand_organization_idToorganizations  Organization? @relation("operating_locations_brand_organization_idToorganizations", fields: [brandOrganization], references: [id])
+  Organization_operating_locations_tenant_organization_idToorganizations Organization? @relation("operating_locations_tenant_organization_idToorganizations", fields: [tenantOrganization], references: [id])
+  Lease                                                                  Lease[]
+
+  @@index([address], name: "index_operating_locations_on_address_id")
+  @@index([brandOrganization], name: "index_operating_locations_on_brand_organization_id")
+  @@index([tenantOrganization], name: "index_operating_locations_on_tenant_organization_id")
+  @@map("operating_locations")
+}
+
+model Organization {
+  id                                                                          Int                  @id @default(autoincrement())
+  name                                                                        String?                 @db.VarChar
+  address                                                                     Int?                 @map("address_id")
+  stateAffiliation                                                            String?                 @map("state_affiliation") @db.VarChar
+  fein                                                                        String?                 @db.VarChar
+  stateBusinessEntityNumber                                                   String?                 @map("state_business_entity_number") @db.VarChar
+  registeredAgent                                                             String?                 @map("registered_agent") @db.VarChar
+  dAndBNumber                                                                 String?                 @map("d_and_b_number") @db.VarChar
+  stockTicker                                                                 String?                 @map("stock_ticker") @db.VarChar
+  createdAt                                                                   DateTime                @map("created_at") @db.Timestamp(6)
+  updatedAt                                                                   DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
+  isActive                                                                    Boolean?                @map("is_active")
+  mainPhone                                                                   String?                 @map("main_phone") @db.VarChar
+  isBrokerage                                                                 Boolean?                @map("is_brokerage")
+  website                                                                     String?                 @db.VarChar
+  notes                                                                       String?                 @db.VarChar
+  industryCategory                                                            String?                 @map("industry_category") @db.VarChar
+  generalRequirements                                                         String?                 @map("general_requirements") @db.VarChar
+  siteRequirement                                                             Int?                 @map("site_requirement_id")
+  unitRequirement                                                             Int?                 @map("unit_requirement_id")
+  demographicRequirement                                                      Int?                 @map("demographic_requirement_id")
+  leaseRequirement                                                            Int?                 @map("lease_requirement_id")
+  mission_statement                                                           String?                 @db.VarChar
+  stock_exchange_mic                                                          String?                 @db.VarChar
+  prospective_es_strategic_partner                                            Boolean?
+  veteran_support_organization                                                Boolean?
+  Address                                                                     Address?                @relation(fields: [address], references: [id])
+  DemographicRequirement                                                      DemographicRequirement? @relation(fields: [demographicRequirement], references: [id])
+  LeaseRequirement                                                            LeaseRequirement?       @relation(fields: [leaseRequirement], references: [id])
+  SiteRequirement                                                             SiteRequirement?        @relation(fields: [siteRequirement], references: [id])
+  UnitRequirement                                                             UnitRequirement?        @relation(fields: [unitRequirement], references: [id])
+  LeasableUnit                                                                LeasableUnit[]
+  OperatingLocation_operating_locations_brand_organization_idToorganizations  OperatingLocation[]     @relation("operating_locations_brand_organization_idToorganizations")
+  OperatingLocation_operating_locations_tenant_organization_idToorganizations OperatingLocation[]     @relation("operating_locations_tenant_organization_idToorganizations")
+  User                                                                        User[]
+
+  @@index([address], name: "index_organizations_on_address_id")
+  @@index([demographicRequirement], name: "index_organizations_on_demographic_requirement_id")
+  @@index([leaseRequirement], name: "index_organizations_on_lease_requirement_id")
+  @@index([siteRequirement], name: "index_organizations_on_site_requirement_id")
+  @@index([unitRequirement], name: "index_organizations_on_unit_requirement_id")
+  @@map("organizations")
+}
+
+model Parcel {
+  id                Int             @id @default(autoincrement())
+  taxId             String?            @map("tax_id") @db.VarChar
+  businessKey       String?            @map("business_key") @db.VarChar
+  insuranceLocation Int?            @map("insurance_location_id")
+  address           Int?            @map("address_id")
+  subdivisionPlat   String?            @map("subdivision_plat") @db.VarChar
+  subdivisionLot    String?            @map("subdivision_lot") @db.VarChar
+  areaAcres         Decimal?           @map("area_acres") @db.Decimal
+  property          Int?            @map("property_id")
+  entityBusinessKey String?            @map("entity_business_key") @db.VarChar
+  createdAt         DateTime           @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime           @map("updated_at") @db.Timestamp(6)
+  notes             String?            @db.VarChar
+  legal_description String?
+  Address           Address?           @relation(fields: [address], references: [id])
+  InsuranceLocation InsuranceLocation? @relation(fields: [insuranceLocation], references: [id])
+  Property          Property?          @relation(fields: [property], references: [id])
+  Building          Building[]
+  LeasableUnit      LeasableUnit[]
+
+  @@index([address], name: "index_parcels_on_address_id")
+  @@index([insuranceLocation], name: "index_parcels_on_insurance_location_id")
+  @@index([property], name: "index_parcels_on_property_id")
+  @@map("parcels")
+}
+
+model Place {
+  id         Int    @id @default(autoincrement())
+  name       String    @db.VarChar
+  fipsCode   Int    @map("fips_code")
+  state      Int?   @map("state_id")
+  created_at DateTime  @db.Timestamp(6)
+  updated_at DateTime  @db.Timestamp(6)
+  State      State?    @relation(fields: [state], references: [id])
+  Address    Address[]
+
+  @@index([state], name: "index_places_on_state_id")
+  @@map("places")
+}
+
+model Portfolio {
+  id        Int   @id @default(autoincrement())
+  name      String?  @db.VarChar
+  createdAt DateTime @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@map("portfolios")
+}
+
+model product_specializations {
+  id              Int       @id @default(autoincrement())
+  product_type_id Int?
+  user_id         Int?
+  created_at      DateTime     @db.Timestamp(6)
+  updated_at      DateTime     @db.Timestamp(6)
+  ProductType     ProductType? @relation(fields: [product_type_id], references: [id])
+  User            User?        @relation(fields: [user_id], references: [id])
+
+  @@index([product_type_id], name: "index_product_specializations_on_product_type_id")
+  @@index([user_id], name: "index_product_specializations_on_user_id")
+}
+
+model ProductType {
+  id                      Int                    @id @default(autoincrement())
+  name                    String                    @unique @db.VarChar
+  createdAt               DateTime                  @map("created_at") @db.Timestamp(6)
+  updatedAt               DateTime                  @updatedAt @map("updated_at") @db.Timestamp(6)
+  LeasableUnit            LeasableUnit[]
+  product_specializations product_specializations[]
+  Property                Property[]
+  PropertyCategoryType    PropertyCategoryType[]
+  SiteRequirement         SiteRequirement[]
+
+  @@map("product_types")
+}
+
+model Property {
+  id                      Int                   @id @default(autoincrement())
+  name                    String?                  @db.VarChar
+  lat                     Decimal?                 @db.Decimal(13, 8)
+  lng                     Decimal?                 @db.Decimal(13, 8)
+  businessKey             String?                  @map("business_key") @db.VarChar
+  createdAt               DateTime                 @map("created_at") @db.Timestamp(6)
+  updatedAt               DateTime                 @updatedAt @map("updated_at") @db.Timestamp(6)
+  propertyClass           Int?                     @map("property_class")
+  sourceEntityKey         String?                  @map("source_entity_key") @db.VarChar
+  legalEntityBusinessKey  String?                  @map("legal_entity_business_key") @db.VarChar
+  legalEntityId           Int?                  @map("legal_entity_id")
+  propertyCategoryType    Int?                  @map("property_category_type_id")
+  propertySubCategoryType Int?                  @map("property_sub_category_type_id")
+  productType             Int?                  @map("product_type_id")
+  ProductType             ProductType?             @relation(fields: [productType], references: [id])
+  PropertyCategoryType    PropertyCategoryType?    @relation(fields: [propertyCategoryType], references: [id])
+  PropertySubCategoryType PropertySubCategoryType? @relation(fields: [propertySubCategoryType], references: [id])
+  LeasableUnit            LeasableUnit[]
+  Lease                   Lease[]
+  Parcel                  Parcel[]
+  PropertyContact         PropertyContact[]
+
+  @@index([legalEntityId], name: "index_properties_on_legal_entity_id")
+  @@index([productType], name: "index_properties_on_product_type_id")
+  @@index([propertyCategoryType], name: "index_properties_on_property_category_type_id")
+  @@index([propertySubCategoryType], name: "index_properties_on_property_sub_category_type_id")
+  @@map("properties")
+}
+
+model PropertyCategoryType {
+  id                      Int                    @id @default(autoincrement())
+  name                    String                    @db.VarChar
+  createdAt               DateTime                  @map("created_at") @db.Timestamp(6)
+  updatedAt               DateTime                  @updatedAt @map("updated_at") @db.Timestamp(6)
+  productType             Int?                   @map("product_type_id")
+  ProductType             ProductType?              @relation(fields: [productType], references: [id])
+  Property                Property[]
+  PropertySubCategoryType PropertySubCategoryType[]
+  SiteRequirement         SiteRequirement[]
+
+  @@index([name], name: "index_property_category_types_on_name")
+  @@index([productType], name: "index_property_category_types_on_product_type_id")
+  @@map("property_category_types")
+}
+
+model PropertyContact {
+  id         Int    @id @default(autoincrement())
+  vendorType Int?      @map("vendor_type")
+  role       Int?
+  property   Int?   @map("property_id")
+  createdAt  DateTime  @map("created_at") @db.Timestamp(6)
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  user       Int?   @map("user_id")
+  Property   Property? @relation(fields: [property], references: [id])
+  User       User?     @relation(fields: [user], references: [id])
+
+  @@index([property], name: "index_property_contacts_on_property_id")
+  @@index([user], name: "index_property_contacts_on_user_id")
+  @@map("property_contacts")
+}
+
+model PropertySubCategoryType {
+  id                   Int                @id @default(autoincrement())
+  name                 String                @db.VarChar
+  createdAt            DateTime              @map("created_at") @db.Timestamp(6)
+  updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamp(6)
+  propertyCategoryType Int?               @map("property_category_type_id")
+  PropertyCategoryType PropertyCategoryType? @relation(fields: [propertyCategoryType], references: [id])
+  Property             Property[]
+  SiteRequirement      SiteRequirement[]
+
+  @@index([name], name: "index_property_sub_category_types_on_name")
+  @@index([propertyCategoryType], name: "index_property_sub_category_types_on_property_category_type_id")
+  @@map("property_sub_category_types")
+}
+
+model SchemaMigration {
+  version String @id @default(cuid()) @db.VarChar(30)
+
+  @@map("schema_migrations")
+}
+
+model SiteRequirement {
+  id                      Int                   @id @default(autoincrement())
+  landMinAcres            Decimal?                 @map("land_min_acres") @db.Decimal
+  landMaxAcres            Decimal?                 @map("land_max_acres") @db.Decimal
+  landAverageAcres        Decimal?                 @map("land_average_acres") @db.Decimal
+  trafficRequirements     Int?                     @map("traffic_requirements")
+  parkingStallsCount      Int?                     @map("parking_stalls_count")
+  parkingStallsPerSqFt    Decimal?                 @map("parking_stalls_per_sq_ft") @db.Decimal
+  accessRequirements      String?                  @map("access_requirements") @db.VarChar
+  productType             Int?                  @map("product_type_id")
+  propertyCategoryType    Int?                  @map("property_category_type_id")
+  propertySubCategoryType Int?                  @map("property_sub_category_type_id")
+  ProductType             ProductType?             @relation(fields: [productType], references: [id])
+  PropertyCategoryType    PropertyCategoryType?    @relation(fields: [propertyCategoryType], references: [id])
+  PropertySubCategoryType PropertySubCategoryType? @relation(fields: [propertySubCategoryType], references: [id])
+  Organization            Organization[]
+
+  @@index([productType], name: "index_site_requirements_on_product_type_id")
+  @@index([propertyCategoryType], name: "index_site_requirements_on_property_category_type_id")
+  @@index([propertySubCategoryType], name: "index_site_requirements_on_property_sub_category_type_id")
+  @@map("site_requirements")
+}
+
+model State {
+  id         Int    @id @default(autoincrement())
+  name       String    @db.VarChar(100)
+  fipsCode   Int       @map("fips_code") @db.SmallInt
+  country    Int?   @map("country_id")
+  created_at DateTime  @db.Timestamp(6)
+  updated_at DateTime  @db.Timestamp(6)
+  Country    Country?  @relation(fields: [country], references: [id])
+  Address    Address[]
+  County     County[]
+  Place      Place[]
+
+  @@index([country], name: "index_states_on_country_id")
+  @@map("states")
+}
+
+model Tagging {
+  id           Int       @id @default(autoincrement())
+  tagId        Int?      @map("tag_id")
+  taggableType String?   @map("taggable_type") @db.VarChar
+  taggableId   Int?      @map("taggable_id")
+  taggerType   String?   @map("tagger_type") @db.VarChar
+  taggerId     Int?      @map("tagger_id")
+  context      String?   @db.VarChar(128)
+  createdAt    DateTime? @map("created_at") @db.Timestamp(6)
+
+  @@unique([tagId, taggableId, taggableType, context, taggerId, taggerType], name: "taggings_idx")
+  @@index([context], name: "index_taggings_on_context")
+  @@index([tagId], name: "index_taggings_on_tag_id")
+  @@index([taggableId], name: "index_taggings_on_taggable_id")
+  @@index([taggableId, taggableType, context], name: "index_taggings_on_taggable_id_and_taggable_type_and_context")
+  @@index([taggableType], name: "index_taggings_on_taggable_type")
+  @@index([taggerId], name: "index_taggings_on_tagger_id")
+  @@index([taggerId, taggerType], name: "index_taggings_on_tagger_id_and_tagger_type")
+  @@index([taggableId, taggableType, taggerId, context], name: "taggings_idy")
+  @@map("taggings")
+}
+
+model Tag {
+  id            Int     @id @default(autoincrement())
+  name          String? @unique @db.VarChar
+  taggingsCount Int?    @default(0) @map("taggings_count")
+
+  @@map("tags")
+}
+
+model UnitRequirement {
+  id                         Int         @id @default(autoincrement())
+  unitType                   Int?           @map("unit_type")
+  sfMin                      Int?           @map("sf_min")
+  sfMax                      Int?           @map("sf_max")
+  sfAvg                      Int?           @map("sf_avg")
+  minFrontageFt              Decimal?       @map("min_frontage_ft") @db.Decimal
+  minCeilingHeightFt         Decimal?       @map("min_ceiling_height_ft") @db.Decimal
+  dockDoorRequirements       String?        @map("dock_door_requirements") @db.VarChar
+  powerServicePhase          Int?           @map("power_service_phase")
+  powerServiceAmps           Int?           @map("power_service_amps")
+  hvacTons                   Decimal?       @map("hvac_tons") @db.Decimal
+  culinaryWaterRequirements  String?        @map("culinary_water_requirements") @db.VarChar
+  sanitarySewerRequirement   String?        @map("sanitary_sewer_requirement") @db.VarChar
+  naturalGasFuelRequirements String?        @map("natural_gas_fuel_requirements") @db.VarChar
+  greaseTrapSize             Decimal?       @map("grease_trap_size") @db.Decimal
+  driveThru                  Boolean?       @map("drive_thru")
+  driveThruDetails           String?        @map("drive_thru_details") @db.VarChar
+  Organization               Organization[]
+
+  @@map("unit_requirements")
+}
+
 model User {
   id                                Int                    @id @default(autoincrement())
   firstName                         String?                   @map("first_name") @db.VarChar
@@ -100,12 +767,12 @@ model User {
   birth_day_of_month                Int?
   birth_month                       Int?
   last_registration_email_date      DateTime?                 @db.Date
-  // Address                           Address?                  @relation(fields: [address], references: [id])
-  // Organization                      Organization?             @relation(fields: [organization], references: [id])
-  // Agent                             Agent[]
-  // DataImport                        DataImport[]
-  // product_specializations           product_specializations[]
-  // PropertyContact                   PropertyContact[]
+  Address                           Address?                  @relation(fields: [address], references: [id])
+  Organization                      Organization?             @relation(fields: [organization], references: [id])
+  Agent                             Agent[]
+  DataImport                        DataImport[]
+  product_specializations           product_specializations[]
+  PropertyContact                   PropertyContact[]
 
   @@index([address], name: "index_users_on_address_id")
   @@index([organization], name: "index_users_on_organization_id")

@@ -12,6 +12,22 @@ export const schema = makeSchema({
     // Output path to where nexus should write the SDL (schema definition language) version of your GraphQL schema.
     schema: join(__dirname, './generated/schema.GraphQL'),
   },
+  // sourceTypes: {
+  //   modules: [{
+  //     //       ^---------------------- Path to the file containing your Source Types
+  //     module: join(__dirname, '..', './node_modules/.prisma/client/index.d.ts'),
+  //     alias: 'tipo'
+  //     //      ^----- Arbitrary unique name used as alias to import your Source Types.
+  //     //             eg: import * as <alias> from <source>
+  //     //             Make sure to use unique aliases if you have multiple sources
+  //   }],
+  //   mapping: {
+  //     Country: 'tipo.Country'
+  //   // ^-----^------^---------- GraphQL type name
+  //   //       |------|---------- Alias of the source where the Source Type is defined
+  //   //              |---------- Source Type name to use for the `User` GraphQL type name
+  //   }
+  // },
   contextType: {
     // Path to the module where the context type is exported
     module: join(__dirname, './context.ts'),

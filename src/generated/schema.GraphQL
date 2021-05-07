@@ -2,6 +2,19 @@
 ### Do not make changes to this file directly
 
 
+type Address {
+  city: String
+  country: Country
+  countyCode: String
+  createdAt: DateTime!
+  lat: Float
+  lineOne: String
+  lineTwo: String
+  lng: Float
+  updatedAt: DateTime!
+  zip: String
+}
+
 type AuthPayload {
   token: String
   user: User
@@ -18,6 +31,22 @@ type Company {
   website: String
 }
 
+type Country {
+  fipsCode: String
+  id: Int
+  longCode: String
+  name: String
+  shortCode: String
+  states: [State!]
+}
+
+type County {
+  fipsCode: Int!
+  id: Int!
+  name: String!
+  state: State
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -29,7 +58,15 @@ type Mutation {
   signup(email: String!, name: String, password: String): AuthPayload
 }
 
+type Place {
+  fipsCode: Int!
+  id: Int!
+  name: String!
+  state: State
+}
+
 type Query {
+  addresses: [Address]
   me: User
 }
 
@@ -46,10 +83,21 @@ type Skill {
   role: Role
 }
 
+type State {
+  counties: [County!]
+  country: Country
+  fipsCode: Int!
+  id: Int!
+  name: String!
+  places: [Place!]
+}
+
 type User {
+  acceptedDisclaimerAt: DateTime
   accountType: Int
   alternateCellPhone: String
   alternateEmail: String
+  currentSignInAt: DateTime
   email: String!
   firstName: String
   id: Int!

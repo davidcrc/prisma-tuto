@@ -44,6 +44,18 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Address: { // root type
+    city?: string | null; // String
+    country?: NexusGenRootTypes['Country'] | null; // Country
+    countyCode?: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    lat?: number | null; // Float
+    lineOne?: string | null; // String
+    lineTwo?: string | null; // String
+    lng?: number | null; // Float
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    zip?: string | null; // String
+  }
   AuthPayload: { // root type
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
@@ -57,7 +69,25 @@ export interface NexusGenObjects {
     roleId?: number | null; // Int
     website?: string | null; // String
   }
+  Country: { // root type
+    fipsCode?: string | null; // String
+    id?: number | null; // Int
+    longCode?: string | null; // String
+    name?: string | null; // String
+    shortCode?: string | null; // String
+  }
+  County: { // root type
+    fipsCode: number; // Int!
+    id: number; // Int!
+    name: string; // String!
+    state?: NexusGenRootTypes['State'] | null; // State
+  }
   Mutation: {};
+  Place: { // root type
+    fipsCode: number; // Int!
+    id: number; // Int!
+    name: string; // String!
+  }
   Query: {};
   Role: { // root type
     id: number; // Int!
@@ -67,10 +97,20 @@ export interface NexusGenObjects {
     id: number; // Int!
     name?: string | null; // String
   }
+  State: { // root type
+    counties?: NexusGenRootTypes['County'][] | null; // [County!]
+    country?: NexusGenRootTypes['Country'] | null; // Country
+    fipsCode: number; // Int!
+    id: number; // Int!
+    name: string; // String!
+    places?: NexusGenRootTypes['Place'][] | null; // [Place!]
+  }
   User: { // root type
+    acceptedDisclaimerAt?: NexusGenScalars['DateTime'] | null; // DateTime
     accountType?: number | null; // Int
     alternateCellPhone?: string | null; // String
     alternateEmail?: string | null; // String
+    currentSignInAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email: string; // String!
     firstName?: string | null; // String
     id: number; // Int!
@@ -96,6 +136,18 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Address: { // field return type
+    city: string | null; // String
+    country: NexusGenRootTypes['Country'] | null; // Country
+    countyCode: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    lat: number | null; // Float
+    lineOne: string | null; // String
+    lineTwo: string | null; // String
+    lng: number | null; // Float
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    zip: string | null; // String
+  }
   AuthPayload: { // field return type
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
@@ -110,12 +162,33 @@ export interface NexusGenFieldTypes {
     roles: NexusGenRootTypes['Role'][]; // [Role!]!
     website: string | null; // String
   }
+  Country: { // field return type
+    fipsCode: string | null; // String
+    id: number | null; // Int
+    longCode: string | null; // String
+    name: string | null; // String
+    shortCode: string | null; // String
+    states: NexusGenRootTypes['State'][] | null; // [State!]
+  }
+  County: { // field return type
+    fipsCode: number; // Int!
+    id: number; // Int!
+    name: string; // String!
+    state: NexusGenRootTypes['State'] | null; // State
+  }
   Mutation: { // field return type
     agreeDisclaimer: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
   }
+  Place: { // field return type
+    fipsCode: number; // Int!
+    id: number; // Int!
+    name: string; // String!
+    state: NexusGenRootTypes['State'] | null; // State
+  }
   Query: { // field return type
+    addresses: Array<NexusGenRootTypes['Address'] | null> | null; // [Address]
     me: NexusGenRootTypes['User'] | null; // User
   }
   Role: { // field return type
@@ -129,10 +202,20 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     role: NexusGenRootTypes['Role'] | null; // Role
   }
+  State: { // field return type
+    counties: NexusGenRootTypes['County'][] | null; // [County!]
+    country: NexusGenRootTypes['Country'] | null; // Country
+    fipsCode: number; // Int!
+    id: number; // Int!
+    name: string; // String!
+    places: NexusGenRootTypes['Place'][] | null; // [Place!]
+  }
   User: { // field return type
+    acceptedDisclaimerAt: NexusGenScalars['DateTime'] | null; // DateTime
     accountType: number | null; // Int
     alternateCellPhone: string | null; // String
     alternateEmail: string | null; // String
+    currentSignInAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: string; // String!
     firstName: string | null; // String
     id: number; // Int!
@@ -148,6 +231,18 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Address: { // field return type name
+    city: 'String'
+    country: 'Country'
+    countyCode: 'String'
+    createdAt: 'DateTime'
+    lat: 'Float'
+    lineOne: 'String'
+    lineTwo: 'String'
+    lng: 'Float'
+    updatedAt: 'DateTime'
+    zip: 'String'
+  }
   AuthPayload: { // field return type name
     token: 'String'
     user: 'User'
@@ -162,12 +257,33 @@ export interface NexusGenFieldTypeNames {
     roles: 'Role'
     website: 'String'
   }
+  Country: { // field return type name
+    fipsCode: 'String'
+    id: 'Int'
+    longCode: 'String'
+    name: 'String'
+    shortCode: 'String'
+    states: 'State'
+  }
+  County: { // field return type name
+    fipsCode: 'Int'
+    id: 'Int'
+    name: 'String'
+    state: 'State'
+  }
   Mutation: { // field return type name
     agreeDisclaimer: 'User'
     login: 'AuthPayload'
     signup: 'AuthPayload'
   }
+  Place: { // field return type name
+    fipsCode: 'Int'
+    id: 'Int'
+    name: 'String'
+    state: 'State'
+  }
   Query: { // field return type name
+    addresses: 'Address'
     me: 'User'
   }
   Role: { // field return type name
@@ -181,10 +297,20 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     role: 'Role'
   }
+  State: { // field return type name
+    counties: 'County'
+    country: 'Country'
+    fipsCode: 'Int'
+    id: 'Int'
+    name: 'String'
+    places: 'Place'
+  }
   User: { // field return type name
+    acceptedDisclaimerAt: 'DateTime'
     accountType: 'Int'
     alternateCellPhone: 'String'
     alternateEmail: 'String'
+    currentSignInAt: 'DateTime'
     email: 'String'
     firstName: 'String'
     id: 'Int'
