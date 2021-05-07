@@ -72,9 +72,9 @@ export const CompanyMutation = extendType({
         email: nonNull(stringArg()),
         website: nonNull(stringArg()),
         roleId: intArg(),
-        roles: arg({
-          type: list('RoleInputType'),
-        }),
+        // roles: arg({
+        //   type: list('RoleInputType'),
+        // }),
       },
       resolve(_root, args, ctx) {
         return ctx.db.company.create({
@@ -102,9 +102,9 @@ export const CompanyMutation = extendType({
         email: stringArg(),
         website: stringArg(),
         roleId: intArg(),
-        roles: arg({
-          type: list('RoleInputType'),
-        }),
+        // roles: arg({
+        //   type: list('RoleInputType'),
+        // }),
       },
       resolve(_root, args, ctx) {
         return ctx.db.company.update({
