@@ -5,8 +5,23 @@
 
 
 import { Context } from "./../context"
-
-
+import { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    /**
+     * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+     */
+    date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    /**
+     * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+     */
+    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateTime";
+  }
+}
 
 
 declare global {
@@ -25,9 +40,14 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  DateTime: any
 }
 
 export interface NexusGenObjects {
+  AuthPayload: { // root type
+    token?: string | null; // String
+    user?: NexusGenRootTypes['User'] | null; // User
+  }
   Company: { // root type
     bio?: string | null; // String
     contactPerson?: string | null; // String
@@ -47,6 +67,22 @@ export interface NexusGenObjects {
     id: number; // Int!
     name?: string | null; // String
   }
+  User: { // root type
+    accountType?: number | null; // Int
+    alternateCellPhone?: string | null; // String
+    alternateEmail?: string | null; // String
+    email: string; // String!
+    firstName?: string | null; // String
+    id: number; // Int!
+    isBroker?: boolean | null; // Boolean
+    lastName?: string | null; // String
+    officePhone?: string | null; // String
+    organization?: number | null; // Int
+    personType?: number | null; // Int
+    picture?: string | null; // String
+    primaryCellPhone?: string | null; // String
+    signInCount?: number | null; // Int
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -60,6 +96,10 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AuthPayload: { // field return type
+    token: string | null; // String
+    user: NexusGenRootTypes['User'] | null; // User
+  }
   Company: { // field return type
     bio: string | null; // String
     contactPerson: string | null; // String
@@ -71,14 +111,12 @@ export interface NexusGenFieldTypes {
     website: string | null; // String
   }
   Mutation: { // field return type
-    createCompany: NexusGenRootTypes['Company']; // Company!
-    deleteCompany: NexusGenRootTypes['Company'] | null; // Company
-    updateCompany: NexusGenRootTypes['Company'] | null; // Company
+    agreeDisclaimer: NexusGenRootTypes['User'] | null; // User
+    login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
   }
   Query: { // field return type
-    companies: Array<NexusGenRootTypes['Company'] | null> | null; // [Company]
-    company: NexusGenRootTypes['Company'] | null; // Company
-    roles: Array<NexusGenRootTypes['Role'] | null> | null; // [Role]
+    me: NexusGenRootTypes['User'] | null; // User
   }
   Role: { // field return type
     company: NexusGenRootTypes['Company'] | null; // Company
@@ -91,9 +129,29 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     role: NexusGenRootTypes['Role'] | null; // Role
   }
+  User: { // field return type
+    accountType: number | null; // Int
+    alternateCellPhone: string | null; // String
+    alternateEmail: string | null; // String
+    email: string; // String!
+    firstName: string | null; // String
+    id: number; // Int!
+    isBroker: boolean | null; // Boolean
+    lastName: string | null; // String
+    officePhone: string | null; // String
+    organization: number | null; // Int
+    personType: number | null; // Int
+    picture: string | null; // String
+    primaryCellPhone: string | null; // String
+    signInCount: number | null; // Int
+  }
 }
 
 export interface NexusGenFieldTypeNames {
+  AuthPayload: { // field return type name
+    token: 'String'
+    user: 'User'
+  }
   Company: { // field return type name
     bio: 'String'
     contactPerson: 'String'
@@ -105,14 +163,12 @@ export interface NexusGenFieldTypeNames {
     website: 'String'
   }
   Mutation: { // field return type name
-    createCompany: 'Company'
-    deleteCompany: 'Company'
-    updateCompany: 'Company'
+    agreeDisclaimer: 'User'
+    login: 'AuthPayload'
+    signup: 'AuthPayload'
   }
   Query: { // field return type name
-    companies: 'Company'
-    company: 'Company'
-    roles: 'Role'
+    me: 'User'
   }
   Role: { // field return type name
     company: 'Company'
@@ -125,35 +181,37 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     role: 'Role'
   }
+  User: { // field return type name
+    accountType: 'Int'
+    alternateCellPhone: 'String'
+    alternateEmail: 'String'
+    email: 'String'
+    firstName: 'String'
+    id: 'Int'
+    isBroker: 'Boolean'
+    lastName: 'String'
+    officePhone: 'String'
+    organization: 'Int'
+    personType: 'Int'
+    picture: 'String'
+    primaryCellPhone: 'String'
+    signInCount: 'Int'
+  }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createCompany: { // args
-      bio: string; // String!
-      contactPerson: string; // String!
+    agreeDisclaimer: { // args
+      acceptedDisclaimerAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    }
+    login: { // args
       email: string; // String!
-      id?: number | null; // Int
-      name: string; // String!
-      roleId?: number | null; // Int
-      website: string; // String!
+      password?: string | null; // String
     }
-    deleteCompany: { // args
-      id: number; // Int!
-    }
-    updateCompany: { // args
-      bio?: string | null; // String
-      contactPerson?: string | null; // String
-      email?: string | null; // String
-      id: number; // Int!
+    signup: { // args
+      email: string; // String!
       name?: string | null; // String
-      roleId?: number | null; // Int
-      website?: string | null; // String
-    }
-  }
-  Query: {
-    company: { // args
-      id: number; // Int!
+      password?: string | null; // String
     }
   }
 }

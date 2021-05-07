@@ -42,3 +42,72 @@ model Skill {
   role   Role?   @relation(fields: [roleId], references: [id])
   roleId Int?
 }
+
+//  My CODE
+
+model User {
+  id                                Int                    @id @default(autoincrement())
+  firstName                         String?                   @map("first_name") @db.VarChar
+  middleName                        String?                   @map("middle_name") @db.VarChar
+  lastName                          String?                   @map("last_name") @db.VarChar
+  alias                             String?                   @db.VarChar
+  organization                      Int?                   @map("organization_id")
+  createdAt                         DateTime                  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                         DateTime                  @updatedAt @map("updated_at") @db.Timestamp(6)
+  email                             String                    @unique @default("") @db.VarChar
+  encryptedPassword                 String                    @default("") @map("encrypted_password") @db.VarChar
+  resetPasswordToken                String?                   @unique @map("reset_password_token") @db.VarChar
+  resetPasswordSentAt               DateTime?                 @map("reset_password_sent_at") @db.Timestamp(6)
+  rememberCreatedAt                 DateTime?                 @map("remember_created_at") @db.Timestamp(6)
+  signInCount                       Int                       @default(0) @map("sign_in_count")
+  currentSignInAt                   DateTime?                 @map("current_sign_in_at") @db.Timestamp(6)
+  lastSignInAt                      DateTime?                 @map("last_sign_in_at") @db.Timestamp(6)
+  current_sign_in_ip                String?                   @db.Inet
+  last_sign_in_ip                   String?                   @db.Inet
+  confirmationToken                 String?                   @unique @map("confirmation_token") @db.VarChar
+  confirmedAt                       DateTime?                 @map("confirmed_at") @db.Timestamp(6)
+  confirmationSentAt                DateTime?                 @map("confirmation_sent_at") @db.Timestamp(6)
+  unconfirmedEmail                  String?                   @map("unconfirmed_email") @db.VarChar
+  role_type                         Int?                      @default(0)
+  is_active                         Boolean?
+  acceptedDisclaimerAt              DateTime?                 @map("accepted_disclaimer_at") @db.Timestamp(6)
+  officePhone                       String?                   @map("office_phone") @db.VarChar
+  primaryCellPhone                  String?                   @map("primary_cell_phone") @db.VarChar
+  alternateCellPhone                String?                   @map("alternate_cell_phone") @db.VarChar
+  alternateEmail                    String?                   @map("alternate_email") @db.VarChar
+  notes                             String?                   @db.VarChar
+  dutyPositionTitle                 String?                   @map("duty_position_title") @db.VarChar
+  isBroker                          Boolean?                  @map("is_broker")
+  isPropertyManager                 Boolean?                  @map("is_property_manager")
+  isMilitaryVeteran                 Boolean?                  @map("is_military_veteran")
+  address                           Int?                   @map("address_id")
+  is_agent                          Boolean                   @default(false)
+  focuses_on_cre                    Boolean                   @default(false)
+  original_license_date             DateTime?                 @db.Timestamp(6)
+  personType                        Int?                      @map("person_type")
+  gender                            Int?
+  preferred_method_communication    Int?
+  linkedin_url                      String?                   @db.VarChar
+  license_expiration_date           DateTime?                 @db.Timestamp(6)
+  ut_re_license_number              String?                   @db.VarChar
+  how_heard_es                      Int?
+  potential_es_team_member          Boolean?
+  free_premium_trial_expiration     DateTime?                 @db.Timestamp(6)
+  accountType                       Int?                      @map("account_type")
+  has_had_premium_trial             Boolean?
+  paid_subscription_expiration_date DateTime?                 @db.Timestamp(6)
+  birth_year                        Int?
+  birth_day_of_month                Int?
+  birth_month                       Int?
+  last_registration_email_date      DateTime?                 @db.Date
+  // Address                           Address?                  @relation(fields: [address], references: [id])
+  // Organization                      Organization?             @relation(fields: [organization], references: [id])
+  // Agent                             Agent[]
+  // DataImport                        DataImport[]
+  // product_specializations           product_specializations[]
+  // PropertyContact                   PropertyContact[]
+
+  @@index([address], name: "index_users_on_address_id")
+  @@index([organization], name: "index_users_on_organization_id")
+  @@map("users")
+}

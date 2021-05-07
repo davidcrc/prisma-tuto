@@ -2,6 +2,11 @@
 ### Do not make changes to this file directly
 
 
+type AuthPayload {
+  token: String
+  user: User
+}
+
 type Company {
   bio: String
   contactPerson: String
@@ -13,16 +18,19 @@ type Company {
   website: String
 }
 
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
 type Mutation {
-  createCompany(bio: String!, contactPerson: String!, email: String!, id: Int, name: String!, roleId: Int, website: String!): Company!
-  deleteCompany(id: Int!): Company
-  updateCompany(bio: String, contactPerson: String, email: String, id: Int!, name: String, roleId: Int, website: String): Company
+  agreeDisclaimer(acceptedDisclaimerAt: DateTime): User
+  login(email: String!, password: String): AuthPayload
+  signup(email: String!, name: String, password: String): AuthPayload
 }
 
 type Query {
-  companies: [Company]
-  company(id: Int!): Company
-  roles: [Role]
+  me: User
 }
 
 type Role {
@@ -36,4 +44,21 @@ type Skill {
   id: Int!
   name: String
   role: Role
+}
+
+type User {
+  accountType: Int
+  alternateCellPhone: String
+  alternateEmail: String
+  email: String!
+  firstName: String
+  id: Int!
+  isBroker: Boolean
+  lastName: String
+  officePhone: String
+  organization: Int
+  personType: Int
+  picture: String
+  primaryCellPhone: String
+  signInCount: Int
 }
