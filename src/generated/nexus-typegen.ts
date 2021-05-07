@@ -175,6 +175,14 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     website?: string | null; // String
   }
+  OrganizationConnection: { // root type
+    edges?: Array<NexusGenRootTypes['OrganizationEdge'] | null> | null; // [OrganizationEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  OrganizationEdge: { // root type
+    cursor: string; // String!
+    node?: NexusGenRootTypes['Organization'] | null; // Organization
+  }
   PageInfo: { // root type
     endCursor?: string | null; // String
     hasNextPage: boolean; // Boolean!
@@ -381,6 +389,14 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     website: string | null; // String
   }
+  OrganizationConnection: { // field return type
+    edges: Array<NexusGenRootTypes['OrganizationEdge'] | null> | null; // [OrganizationEdge]
+    pageInfo: NexusGenRootTypes['PageInfo']; // PageInfo!
+  }
+  OrganizationEdge: { // field return type
+    cursor: string; // String!
+    node: NexusGenRootTypes['Organization'] | null; // Organization
+  }
   PageInfo: { // field return type
     endCursor: string | null; // String
     hasNextPage: boolean; // Boolean!
@@ -412,6 +428,7 @@ export interface NexusGenFieldTypes {
     leasableUnits: Array<NexusGenRootTypes['LeasableUnit'] | null> | null; // [LeasableUnit]
     leasableUnitsConnection: NexusGenRootTypes['LeasableUnitConnection'] | null; // LeasableUnitConnection
     me: NexusGenRootTypes['User'] | null; // User
+    organizations: NexusGenRootTypes['OrganizationConnection'] | null; // OrganizationConnection
   }
   Role: { // field return type
     company: NexusGenRootTypes['Company'] | null; // Company
@@ -586,6 +603,14 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
     website: 'String'
   }
+  OrganizationConnection: { // field return type name
+    edges: 'OrganizationEdge'
+    pageInfo: 'PageInfo'
+  }
+  OrganizationEdge: { // field return type name
+    cursor: 'String'
+    node: 'Organization'
+  }
   PageInfo: { // field return type name
     endCursor: 'String'
     hasNextPage: 'Boolean'
@@ -617,6 +642,7 @@ export interface NexusGenFieldTypeNames {
     leasableUnits: 'LeasableUnit'
     leasableUnitsConnection: 'LeasableUnitConnection'
     me: 'User'
+    organizations: 'OrganizationConnection'
   }
   Role: { // field return type name
     company: 'Company'
@@ -674,6 +700,12 @@ export interface NexusGenArgTypes {
   }
   Query: {
     leasableUnitsConnection: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    organizations: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
