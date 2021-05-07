@@ -209,9 +209,9 @@ export const schema = makeSchema({
   types,
   outputs: {
     // Output path to where nexus should write the generated TypeScript definition types derived from your schema. This is mandatory to benefit from Nexus' type-safety.
-    typegen: join(__dirname, '..', './generated/nexus-typegen.ts'),
+    typegen: join(__dirname, './generated/nexus-typegen.ts'),
     // Output path to where nexus should write the SDL (schema definition language) version of your GraphQL schema.
-    schema: join(__dirname, '..', './generated/schema.GraphQL'),
+    schema: join(__dirname, './generated/schema.GraphQL'),
   },
   contextType: {
     // Path to the module where the context type is exported
@@ -268,3 +268,225 @@ export const context = {
 ```
 
 ## Writing queries and mutations
+
+> Add to src/graphql/company.ts
+
+```typescript
+export const CompanyQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    // get all companies
+    t.list.field('companies', {
+      type: 'Company',
+      resolve(_root, _args, ctx) {
+        return ctx.db.company.findMany();
+      },
+    });
+    // get company by id
+    t.field('company', {
+      type: 'Company',
+      args: {
+        id: nonNull(intArg()),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.db.company.findUnique({
+          where: { id: args.id },
+        });
+      },
+    });
+    t.list.field('roles', {
+      type: 'Role',
+      resolve(_root, _args, ctx) {
+        return ctx.db.role.findMany();
+      },
+    });
+  },
+});
+```
+
+```typescript
+export const CompanyMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    // create a new company
+    t.nonNull.field('createCompany', {
+      type: 'Company',
+      args: {
+        id: intArg(),
+        name: nonNull(stringArg()),
+        contactPerson: nonNull(stringArg()),
+        bio: nonNull(stringArg()),
+        email: nonNull(stringArg()),
+        website: nonNull(stringArg()),
+        roleId: intArg(),
+        roles: arg({
+          type: list('RoleInputType'),
+        }),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.db.company.create({
+          data: {
+            name: args.name,
+            contactPerson: args.contactPerson,
+            bio: args.bio,
+            email: args.email,
+            website: args.website,
+            roles: {
+              connect: [{ id: args.roleId || undefined }],
+            },
+          },
+        });
+      },
+    });
+    // update a company by id
+    t.field('updateCompany', {
+      type: 'Company',
+      args: {
+        id: nonNull(intArg()),
+        name: stringArg(),
+        contactPerson: stringArg(),
+        bio: stringArg(),
+        email: stringArg(),
+        website: stringArg(),
+        roleId: intArg(),
+        roles: arg({
+          type: list('RoleInputType'),
+        }),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.db.company.update({
+          where: { id: args.id },
+          data: {
+            name: args.name,
+            contactPerson: args.contactPerson,
+            bio: args.bio,
+            email: args.email,
+            website: args.website,
+            roles: {
+              connect: [{ id: args.roleId || undefined }],
+            },
+          },
+        });
+      },
+    });
+    // delete a company by id
+    t.field('deleteCompany', {
+      type: 'Company',
+      args: {
+        id: nonNull(intArg()),
+      },
+      resolve(_root, args, ctx) {
+        return ctx.db.company.delete({
+          where: { id: args.id },
+        });
+      },
+    });
+  },
+});
+```
+
+
+## Running our queries and mutations in the Playground
+
+> Run
+
+    npm run dev
+
+### Examples Mutations
+
+> Create skill
+
+```
+mutation CreateSkill {
+  createSkill(name: "GraphQL") {
+    id
+    name
+  }
+}
+```
+
+> create Role
+
+```
+mutation CreateRole {
+  createRole(name: "Backend Developer" skillId: 1) {
+    id
+    name
+  }
+}
+```
+
+> Create company 
+
+```
+mutation CreateCompany {
+  createCompany(
+    name: "My Super Cool Company"
+    bio: "A super cool company"
+    website: "mycomp.com"
+    contactPerson: "Barry McBarry"
+    email: "barry@mycomp.com"
+    roleId: 1
+  ) {
+    name
+    bio
+    website
+    contactPerson
+    email
+    roles {
+      name
+      skills {
+        name
+      }
+    }
+  }
+}
+```
+
+### Example Queries
+
+> get all companies and their roles and skills
+
+```
+query GetCompanies {
+  companies {
+    id
+    name
+    contactPerson
+    bio
+    email
+    website
+    roles {
+      name
+      skills {
+        name
+      }
+    }
+  }
+}
+```
+
+> get all roles and their skills
+
+```
+query GetRoles {
+  roles {
+    id
+    name
+    skills {
+      name
+    }
+  }
+}
+```
+
+> get all skills
+
+```
+query GetSkills {
+  skills {
+    id
+    name
+  }
+}
+```

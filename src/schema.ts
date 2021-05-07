@@ -8,9 +8,9 @@ export const schema = makeSchema({
   types,
   outputs: {
     // Output path to where nexus should write the generated TypeScript definition types derived from your schema. This is mandatory to benefit from Nexus' type-safety.
-    typegen: join(__dirname, '..', './generated/nexus-typegen.ts'),
+    typegen: join(__dirname, './generated/nexus-typegen.ts'),
     // Output path to where nexus should write the SDL (schema definition language) version of your GraphQL schema.
-    schema: join(__dirname, '..', './generated/schema.GraphQL'),
+    schema: join(__dirname, './generated/schema.GraphQL'),
   },
   contextType: {
     // Path to the module where the context type is exported
