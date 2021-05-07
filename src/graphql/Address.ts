@@ -8,6 +8,9 @@ export const Address = objectType({
 
     t.nullable.field('country', {
       type: 'Country',
+      resolve: (_parent, _args, ctx) => {
+        return ctx.db.country.findMany( { where: { id: _parent.country_id }} )
+      },
     })
     // t.nullable.string('countryCode')
 

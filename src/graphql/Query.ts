@@ -42,6 +42,18 @@ export const UserQuery = extendType({
       },
     })
 
+    t.nullable.list.field('leasableUnits', {
+      type: 'LeasableUnit',
+    })
+
+    t.connectionField('leasableUnitsConnection', {
+      type: 'LeasableUnit',
+      // disableBackwardPagination: false,
+      resolve: (_parent, _args, ctx) => {
+        
+      },
+    })
+
     t.field('me', {
       type: 'User',
       resolve: (_parent, _args, ctx) => {
