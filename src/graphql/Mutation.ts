@@ -32,7 +32,7 @@ export const LogInMutation = extendType({
     t.field('login', {
       type: 'AuthPayload',
       args: {
-        email: nonNull(stringArg()),
+        email: stringArg(),
         password: stringArg(),
       },
       resolve: async (_, { email, password }, ctx) => {

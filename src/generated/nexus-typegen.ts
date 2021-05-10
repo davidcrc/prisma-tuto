@@ -826,7 +826,7 @@ export interface NexusGenArgTypes {
       acceptedDisclaimerAt?: NexusGenScalars['DateTime'] | null; // DateTime
     }
     login: { // args
-      email: string; // String!
+      email?: string | null; // String
       password?: string | null; // String
     }
     signup: { // args
