@@ -10,12 +10,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Add here your models
+// video on relations: https://www.youtube.com/watch?v=jeHJbYLCgzI&ab_channel=Prisma
 
 // 1-n with trade and role
 // company can have many roles
 model Company {
-  id            Int      @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   name          String?
   contactPerson String?
   bio           String?
@@ -28,17 +28,28 @@ model Company {
 // a role can have many skills
 // a company can have many roles
 model Role {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String?
   skills    Skill[]
-  company   Company? @relation(fields: [companyId], references: [id]) // not in db, used by Prisma to set relation
+  company   Company? @relation(fields: [companyId], references: [id]) // not in db, used by prisma to set relation
   companyId Int? // the foreign key, this is in the db
 }
 
 // 1-n with role
 model Skill {
-  id     Int    @id @default(autoincrement())
+  id     Int     @id @default(autoincrement())
   name   String?
   role   Role?   @relation(fields: [roleId], references: [id])
   roleId Int?
 }
+
+// model One {
+//   id   Int  @id @default(autoincrement())
+//   many Many[]
+// }
+
+// model Many {
+//   id               Int @id @default(autoincrement())
+//   oneRelation      One @relation(fields: [foreignKey], references: [id])
+//   foreignKey       Int
+// }

@@ -98,6 +98,10 @@
 
     prisma migrate dev --name init --preview-feature
 
+    - Deplot migration:
+    
+      npx prisma migrate deploy
+
 ## Using the Nexus objectType 
 
 > src/graphql/company.ts

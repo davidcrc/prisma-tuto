@@ -15,7 +15,10 @@ declare global {
 
 export interface NexusGenInputs {
   RoleInputType: { // input type
-    id: number; // Int!
+    id?: number | null; // Int
+  }
+  SkillInputType: { // input type
+    id?: number | null; // Int
   }
 }
 
@@ -75,14 +78,21 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createCompany: NexusGenRootTypes['Company']; // Company!
-    createRole: NexusGenRootTypes['Company']; // Company!
+    createRole: NexusGenRootTypes['Role'] | null; // Role
+    createSkill: NexusGenRootTypes['Skill'] | null; // Skill
     deleteCompany: NexusGenRootTypes['Company'] | null; // Company
+    deleteRole: NexusGenRootTypes['Role'] | null; // Role
+    deleteSkill: NexusGenRootTypes['Skill'] | null; // Skill
     updateCompany: NexusGenRootTypes['Company'] | null; // Company
+    updateRole: NexusGenRootTypes['Role'] | null; // Role
+    updateSkill: NexusGenRootTypes['Skill'] | null; // Skill
   }
   Query: { // field return type
     companies: Array<NexusGenRootTypes['Company'] | null> | null; // [Company]
     company: NexusGenRootTypes['Company'] | null; // Company
     roles: Array<NexusGenRootTypes['Role'] | null> | null; // [Role]
+    skill: NexusGenRootTypes['Skill'] | null; // Skill
+    skills: Array<NexusGenRootTypes['Skill'] | null> | null; // [Skill]
   }
   Role: { // field return type
     company: NexusGenRootTypes['Company'] | null; // Company
@@ -110,14 +120,21 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createCompany: 'Company'
-    createRole: 'Company'
+    createRole: 'Role'
+    createSkill: 'Skill'
     deleteCompany: 'Company'
+    deleteRole: 'Role'
+    deleteSkill: 'Skill'
     updateCompany: 'Company'
+    updateRole: 'Role'
+    updateSkill: 'Skill'
   }
   Query: { // field return type name
     companies: 'Company'
     company: 'Company'
     roles: 'Role'
+    skill: 'Skill'
+    skills: 'Skill'
   }
   Role: { // field return type name
     company: 'Company'
@@ -147,8 +164,18 @@ export interface NexusGenArgTypes {
     createRole: { // args
       name: string; // String!
       skillId?: number | null; // Int
+      skills?: Array<NexusGenInputs['SkillInputType'] | null> | null; // [SkillInputType]
+    }
+    createSkill: { // args
+      name: string; // String!
     }
     deleteCompany: { // args
+      id: number; // Int!
+    }
+    deleteRole: { // args
+      id: number; // Int!
+    }
+    deleteSkill: { // args
       id: number; // Int!
     }
     updateCompany: { // args
@@ -161,9 +188,22 @@ export interface NexusGenArgTypes {
       roles?: Array<NexusGenInputs['RoleInputType'] | null> | null; // [RoleInputType]
       website?: string | null; // String
     }
+    updateRole: { // args
+      id: number; // Int!
+      name?: string | null; // String
+      skillId?: number | null; // Int
+      skills?: Array<NexusGenInputs['SkillInputType'] | null> | null; // [SkillInputType]
+    }
+    updateSkill: { // args
+      id: number; // Int!
+      name?: string | null; // String
+    }
   }
   Query: {
     company: { // args
+      id: number; // Int!
+    }
+    skill: { // args
       id: number; // Int!
     }
   }

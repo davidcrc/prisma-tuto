@@ -1,29 +1,25 @@
-import { arg, extendType, intArg, list, nonNull, objectType, stringArg } from 'nexus';
+import { arg, extendType, intArg, list, nonNull, objectType, stringArg } from "nexus";
 
 export const Company = objectType({
   name: 'Company',
   definition(t) {
-    t.nonNull.int('id');
-    t.string('name');
-    t.string('contactPerson');
-    t.string('bio');
-    t.string('email');
-    t.string('website');
-    t.int('roleId');
+    t.nonNull.int('id')
+    t.string('name')
+    t.string('contactPerson')
+    t.string('bio')
+    t.string('email')
+    t.string('website')
+    t.int('roleId')
     t.nonNull.list.nonNull.field('roles', {
       type: 'Role',
       resolve: (parent, _, ctx) => {
-        return ctx.db.company
-          .findUnique({
-            where: { id: parent.id },
-          })
-          .roles();
-      },
-    });
-  },
-});
-
-// Adding query
+        return ctx.db.company.findUnique({
+          where: { id: parent.id }
+        }).roles()
+      }
+    })
+  }
+})
 
 export const CompanyQuery = extendType({
   type: 'Query',
@@ -32,31 +28,29 @@ export const CompanyQuery = extendType({
     t.list.field('companies', {
       type: 'Company',
       resolve(_root, _args, ctx) {
-        return ctx.db.company.findMany();
-      },
-    });
+        return ctx.db.company.findMany()
+      }
+    })
     // get company by id
     t.field('company', {
       type: 'Company',
       args: {
-        id: nonNull(intArg()),
+        id: nonNull(intArg())
       },
       resolve(_root, args, ctx) {
         return ctx.db.company.findUnique({
-          where: { id: args.id },
-        });
-      },
-    });
+          where: { id: args.id }
+        })
+      }
+    })
     t.list.field('roles', {
       type: 'Role',
       resolve(_root, _args, ctx) {
-        return ctx.db.role.findMany();
-      },
-    });
-  },
-});
-
-// Adding mutation
+        return ctx.db.role.findMany()
+      }
+    })
+  }
+})
 
 export const CompanyMutation = extendType({
   type: 'Mutation',
@@ -73,8 +67,8 @@ export const CompanyMutation = extendType({
         website: nonNull(stringArg()),
         roleId: intArg(),
         roles: arg({
-          type: list('RoleInputType'),
-        }),
+          type: list('RoleInputType')
+        })
       },
       resolve(_root, args, ctx) {
         return ctx.db.company.create({
@@ -85,12 +79,14 @@ export const CompanyMutation = extendType({
             email: args.email,
             website: args.website,
             roles: {
-              connect: [{ id: args.roleId || undefined }],
-            },
-          },
-        });
-      },
-    });
+              connect: [
+                { id: args.roleId || undefined },
+              ]
+            }
+          }
+        })
+      }
+    })
     // update a company by id
     t.field('updateCompany', {
       type: 'Company',
@@ -103,8 +99,8 @@ export const CompanyMutation = extendType({
         website: stringArg(),
         roleId: intArg(),
         roles: arg({
-          type: list('RoleInputType'),
-        }),
+          type: list('RoleInputType')
+        })
       },
       resolve(_root, args, ctx) {
         return ctx.db.company.update({
@@ -116,23 +112,25 @@ export const CompanyMutation = extendType({
             email: args.email,
             website: args.website,
             roles: {
-              connect: [{ id: args.roleId || undefined }],
-            },
-          },
-        });
-      },
-    });
+              connect: [
+                { id: args.roleId || undefined },
+              ]
+            }
+          }
+        })
+      }
+    })
     // delete a company by id
     t.field('deleteCompany', {
       type: 'Company',
       args: {
-        id: nonNull(intArg()),
+        id: nonNull(intArg())
       },
       resolve(_root, args, ctx) {
         return ctx.db.company.delete({
-          where: { id: args.id },
-        });
-      },
-    });
-  },
-});
+          where: { id: args.id }
+        })
+      }
+    })
+  }
+})
