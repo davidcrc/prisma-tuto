@@ -53,9 +53,22 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type DemographicRequirement {
+  ageRange: String
+  avgHouseholdIncome: Int
+  daytimeEmployeesCount: Int
+  daytimeEmployeesRadiusMiles: Float
+  householdCountRadiusMiles: Float
+  houselholdCount: Int
+  id: Int!
+  organizations: [Organization!]
+  populationCount: Int
+  populationCountRadiusMiles: Float
+}
+
 type LeasableUnit {
   address: Address
-  agents: [Agent]
+  agents: [Agent!]
   baseRent: Float
   businessKey: String
   ceilingHeightInches: Int
@@ -123,6 +136,16 @@ type LeasableUnitType {
   updatedAt: DateTime!
 }
 
+type LeaseRequirement {
+  exclusiveUseRequired: String
+  id: Int!
+  initialTermMonths: Int
+  numberAndLenghtOfOptions: String
+  organizations: [Organization!]
+  signage: String
+  useExpression: String
+}
+
 type Mutation {
   agreeDisclaimer(acceptedDisclaimerAt: DateTime): User
   login(email: String!, password: String): AuthPayload
@@ -133,25 +156,25 @@ type Organization {
   address: Address
   createdAt: DateTime!
   dAndBNumber: String
-  demographicRequirement: Int
+  demographicRequirement: DemographicRequirement
   fein: String
   generalRequirements: String
   id: Int!
   industryCategory: String
   isActive: Boolean
   isBrokerage: Boolean
-  leasableUnit: LeasableUnit
-  leaseRequirement: Int
+  leasableUnit: [LeasableUnit!]
+  leaseRequirement: LeaseRequirement
   logo: String
   mainPhone: String
   name: String
   notes: String
   registeredAgent: String
-  siteRequirement: Int
+  siteRequirement: SiteRequirement
   stateAffiliation: String
   stateBusinessEntityNumber: String
   stockTicker: String
-  unitRequirement: Int
+  unitRequirement: UnitRequirement
   updatedAt: DateTime!
   website: String
 }
@@ -212,14 +235,16 @@ type ProductType {
   createdAt: DateTime!
   id: Int!
   name: String!
-  properties: [Property]
+  properties: [Property!]
+  propertyCategoryTypes: [PropertyCategoryType!]
+  siteRequirements: [SiteRequirement!]
   updatedAt: DateTime!
 }
 
 type Property {
   businessKey: String!
   name: String!
-  productType: Int!
+  productType: ProductType!
 }
 
 type PropertyCategoryType {
@@ -297,6 +322,27 @@ type State {
   id: Int!
   name: String!
   places: [Place!]
+}
+
+type UnitRequirement {
+  culinaryWaterRequirements: String
+  dockDoorRequirements: String
+  driveThru: Boolean
+  driveThruDetails: String
+  greaseTrapSize: Float
+  hvacTons: Float
+  id: Int!
+  minCeilingHeightFt: Float
+  minFrontageFt: Float
+  naturalGasFuelRequirements: String
+  organizations: [Organization!]
+  powerServiceAmps: Int
+  powerServicePhase: Int
+  sanitarySewerRequirement: String
+  sfAvg: Int
+  sfMax: Int
+  sfMin: Int
+  unitType: Int
 }
 
 type User {

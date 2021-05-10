@@ -92,9 +92,21 @@ export interface NexusGenObjects {
     name: string; // String!
     state?: NexusGenRootTypes['State'] | null; // State
   }
+  DemographicRequirement: { // root type
+    ageRange?: string | null; // String
+    avgHouseholdIncome?: number | null; // Int
+    daytimeEmployeesCount?: number | null; // Int
+    daytimeEmployeesRadiusMiles?: number | null; // Float
+    householdCountRadiusMiles?: number | null; // Float
+    houselholdCount?: number | null; // Int
+    id: number; // Int!
+    organizations?: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    populationCount?: number | null; // Int
+    populationCountRadiusMiles?: number | null; // Float
+  }
   LeasableUnit: { // root type
     address?: NexusGenRootTypes['Address'] | null; // Address
-    agents?: Array<NexusGenRootTypes['Agent'] | null> | null; // [Agent]
+    agents?: NexusGenRootTypes['Agent'][] | null; // [Agent!]
     baseRent?: number | null; // Float
     businessKey?: string | null; // String
     ceilingHeightInches?: number | null; // Int
@@ -144,29 +156,38 @@ export interface NexusGenObjects {
     name?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  LeaseRequirement: { // root type
+    exclusiveUseRequired?: string | null; // String
+    id: number; // Int!
+    initialTermMonths?: number | null; // Int
+    numberAndLenghtOfOptions?: string | null; // String
+    organizations?: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    signage?: string | null; // String
+    useExpression?: string | null; // String
+  }
   Mutation: {};
   Organization: { // root type
     address?: NexusGenRootTypes['Address'] | null; // Address
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     dAndBNumber?: string | null; // String
-    demographicRequirement?: number | null; // Int
+    demographicRequirement?: NexusGenRootTypes['DemographicRequirement'] | null; // DemographicRequirement
     fein?: string | null; // String
     generalRequirements?: string | null; // String
     id: number; // Int!
     industryCategory?: string | null; // String
     isActive?: boolean | null; // Boolean
     isBrokerage?: boolean | null; // Boolean
-    leasableUnit?: NexusGenRootTypes['LeasableUnit'] | null; // LeasableUnit
-    leaseRequirement?: number | null; // Int
+    leasableUnit?: NexusGenRootTypes['LeasableUnit'][] | null; // [LeasableUnit!]
+    leaseRequirement?: NexusGenRootTypes['LeaseRequirement'] | null; // LeaseRequirement
     mainPhone?: string | null; // String
     name?: string | null; // String
     notes?: string | null; // String
     registeredAgent?: string | null; // String
-    siteRequirement?: number | null; // Int
+    siteRequirement?: NexusGenRootTypes['SiteRequirement'] | null; // SiteRequirement
     stateAffiliation?: string | null; // String
     stateBusinessEntityNumber?: string | null; // String
     stockTicker?: string | null; // String
-    unitRequirement?: number | null; // Int
+    unitRequirement?: NexusGenRootTypes['UnitRequirement'] | null; // UnitRequirement
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     website?: string | null; // String
   }
@@ -193,13 +214,15 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: number; // Int!
     name: string; // String!
-    properties?: Array<NexusGenRootTypes['Property'] | null> | null; // [Property]
+    properties?: NexusGenRootTypes['Property'][] | null; // [Property!]
+    propertyCategoryTypes?: NexusGenRootTypes['PropertyCategoryType'][] | null; // [PropertyCategoryType!]
+    siteRequirements?: NexusGenRootTypes['SiteRequirement'][] | null; // [SiteRequirement!]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Property: { // root type
     businessKey: string; // String!
     name: string; // String!
-    productType: number; // Int!
+    productType: NexusGenRootTypes['ProductType']; // ProductType!
   }
   PropertyCategoryType: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -242,6 +265,26 @@ export interface NexusGenObjects {
     id: number; // Int!
     name: string; // String!
     places?: NexusGenRootTypes['Place'][] | null; // [Place!]
+  }
+  UnitRequirement: { // root type
+    culinaryWaterRequirements?: string | null; // String
+    dockDoorRequirements?: string | null; // String
+    driveThru?: boolean | null; // Boolean
+    driveThruDetails?: string | null; // String
+    greaseTrapSize?: number | null; // Float
+    hvacTons?: number | null; // Float
+    id: number; // Int!
+    minCeilingHeightFt?: number | null; // Float
+    minFrontageFt?: number | null; // Float
+    naturalGasFuelRequirements?: string | null; // String
+    organizations?: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    powerServiceAmps?: number | null; // Int
+    powerServicePhase?: number | null; // Int
+    sanitarySewerRequirement?: string | null; // String
+    sfAvg?: number | null; // Int
+    sfMax?: number | null; // Int
+    sfMin?: number | null; // Int
+    unitType?: number | null; // Int
   }
   User: { // root type
     acceptedDisclaimerAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -315,9 +358,21 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     state: NexusGenRootTypes['State'] | null; // State
   }
+  DemographicRequirement: { // field return type
+    ageRange: string | null; // String
+    avgHouseholdIncome: number | null; // Int
+    daytimeEmployeesCount: number | null; // Int
+    daytimeEmployeesRadiusMiles: number | null; // Float
+    householdCountRadiusMiles: number | null; // Float
+    houselholdCount: number | null; // Int
+    id: number; // Int!
+    organizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    populationCount: number | null; // Int
+    populationCountRadiusMiles: number | null; // Float
+  }
   LeasableUnit: { // field return type
     address: NexusGenRootTypes['Address'] | null; // Address
-    agents: Array<NexusGenRootTypes['Agent'] | null> | null; // [Agent]
+    agents: NexusGenRootTypes['Agent'][] | null; // [Agent!]
     baseRent: number | null; // Float
     businessKey: string | null; // String
     ceilingHeightInches: number | null; // Int
@@ -370,6 +425,15 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  LeaseRequirement: { // field return type
+    exclusiveUseRequired: string | null; // String
+    id: number; // Int!
+    initialTermMonths: number | null; // Int
+    numberAndLenghtOfOptions: string | null; // String
+    organizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    signage: string | null; // String
+    useExpression: string | null; // String
+  }
   Mutation: { // field return type
     agreeDisclaimer: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -379,25 +443,25 @@ export interface NexusGenFieldTypes {
     address: NexusGenRootTypes['Address'] | null; // Address
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     dAndBNumber: string | null; // String
-    demographicRequirement: number | null; // Int
+    demographicRequirement: NexusGenRootTypes['DemographicRequirement'] | null; // DemographicRequirement
     fein: string | null; // String
     generalRequirements: string | null; // String
     id: number; // Int!
     industryCategory: string | null; // String
     isActive: boolean | null; // Boolean
     isBrokerage: boolean | null; // Boolean
-    leasableUnit: NexusGenRootTypes['LeasableUnit'] | null; // LeasableUnit
-    leaseRequirement: number | null; // Int
+    leasableUnit: NexusGenRootTypes['LeasableUnit'][] | null; // [LeasableUnit!]
+    leaseRequirement: NexusGenRootTypes['LeaseRequirement'] | null; // LeaseRequirement
     logo: string | null; // String
     mainPhone: string | null; // String
     name: string | null; // String
     notes: string | null; // String
     registeredAgent: string | null; // String
-    siteRequirement: number | null; // Int
+    siteRequirement: NexusGenRootTypes['SiteRequirement'] | null; // SiteRequirement
     stateAffiliation: string | null; // String
     stateBusinessEntityNumber: string | null; // String
     stockTicker: string | null; // String
-    unitRequirement: number | null; // Int
+    unitRequirement: NexusGenRootTypes['UnitRequirement'] | null; // UnitRequirement
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     website: string | null; // String
   }
@@ -425,13 +489,15 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: number; // Int!
     name: string; // String!
-    properties: Array<NexusGenRootTypes['Property'] | null> | null; // [Property]
+    properties: NexusGenRootTypes['Property'][] | null; // [Property!]
+    propertyCategoryTypes: NexusGenRootTypes['PropertyCategoryType'][] | null; // [PropertyCategoryType!]
+    siteRequirements: NexusGenRootTypes['SiteRequirement'][] | null; // [SiteRequirement!]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Property: { // field return type
     businessKey: string; // String!
     name: string; // String!
-    productType: number; // Int!
+    productType: NexusGenRootTypes['ProductType']; // ProductType!
   }
   PropertyCategoryType: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -480,6 +546,26 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     name: string; // String!
     places: NexusGenRootTypes['Place'][] | null; // [Place!]
+  }
+  UnitRequirement: { // field return type
+    culinaryWaterRequirements: string | null; // String
+    dockDoorRequirements: string | null; // String
+    driveThru: boolean | null; // Boolean
+    driveThruDetails: string | null; // String
+    greaseTrapSize: number | null; // Float
+    hvacTons: number | null; // Float
+    id: number; // Int!
+    minCeilingHeightFt: number | null; // Float
+    minFrontageFt: number | null; // Float
+    naturalGasFuelRequirements: string | null; // String
+    organizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    powerServiceAmps: number | null; // Int
+    powerServicePhase: number | null; // Int
+    sanitarySewerRequirement: string | null; // String
+    sfAvg: number | null; // Int
+    sfMax: number | null; // Int
+    sfMin: number | null; // Int
+    unitType: number | null; // Int
   }
   User: { // field return type
     acceptedDisclaimerAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -543,6 +629,18 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     state: 'State'
   }
+  DemographicRequirement: { // field return type name
+    ageRange: 'String'
+    avgHouseholdIncome: 'Int'
+    daytimeEmployeesCount: 'Int'
+    daytimeEmployeesRadiusMiles: 'Float'
+    householdCountRadiusMiles: 'Float'
+    houselholdCount: 'Int'
+    id: 'Int'
+    organizations: 'Organization'
+    populationCount: 'Int'
+    populationCountRadiusMiles: 'Float'
+  }
   LeasableUnit: { // field return type name
     address: 'Address'
     agents: 'Agent'
@@ -598,6 +696,15 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     updatedAt: 'DateTime'
   }
+  LeaseRequirement: { // field return type name
+    exclusiveUseRequired: 'String'
+    id: 'Int'
+    initialTermMonths: 'Int'
+    numberAndLenghtOfOptions: 'String'
+    organizations: 'Organization'
+    signage: 'String'
+    useExpression: 'String'
+  }
   Mutation: { // field return type name
     agreeDisclaimer: 'User'
     login: 'AuthPayload'
@@ -607,7 +714,7 @@ export interface NexusGenFieldTypeNames {
     address: 'Address'
     createdAt: 'DateTime'
     dAndBNumber: 'String'
-    demographicRequirement: 'Int'
+    demographicRequirement: 'DemographicRequirement'
     fein: 'String'
     generalRequirements: 'String'
     id: 'Int'
@@ -615,17 +722,17 @@ export interface NexusGenFieldTypeNames {
     isActive: 'Boolean'
     isBrokerage: 'Boolean'
     leasableUnit: 'LeasableUnit'
-    leaseRequirement: 'Int'
+    leaseRequirement: 'LeaseRequirement'
     logo: 'String'
     mainPhone: 'String'
     name: 'String'
     notes: 'String'
     registeredAgent: 'String'
-    siteRequirement: 'Int'
+    siteRequirement: 'SiteRequirement'
     stateAffiliation: 'String'
     stateBusinessEntityNumber: 'String'
     stockTicker: 'String'
-    unitRequirement: 'Int'
+    unitRequirement: 'UnitRequirement'
     updatedAt: 'DateTime'
     website: 'String'
   }
@@ -654,12 +761,14 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     name: 'String'
     properties: 'Property'
+    propertyCategoryTypes: 'PropertyCategoryType'
+    siteRequirements: 'SiteRequirement'
     updatedAt: 'DateTime'
   }
   Property: { // field return type name
     businessKey: 'String'
     name: 'String'
-    productType: 'Int'
+    productType: 'ProductType'
   }
   PropertyCategoryType: { // field return type name
     createdAt: 'DateTime'
@@ -708,6 +817,26 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     name: 'String'
     places: 'Place'
+  }
+  UnitRequirement: { // field return type name
+    culinaryWaterRequirements: 'String'
+    dockDoorRequirements: 'String'
+    driveThru: 'Boolean'
+    driveThruDetails: 'String'
+    greaseTrapSize: 'Float'
+    hvacTons: 'Float'
+    id: 'Int'
+    minCeilingHeightFt: 'Float'
+    minFrontageFt: 'Float'
+    naturalGasFuelRequirements: 'String'
+    organizations: 'Organization'
+    powerServiceAmps: 'Int'
+    powerServicePhase: 'Int'
+    sanitarySewerRequirement: 'String'
+    sfAvg: 'Int'
+    sfMax: 'Int'
+    sfMin: 'Int'
+    unitType: 'Int'
   }
   User: { // field return type name
     acceptedDisclaimerAt: 'DateTime'

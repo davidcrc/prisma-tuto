@@ -35,7 +35,7 @@ export const LeasableUnit = objectType({
       type: 'Organization',
     })
     // TODO: Args
-    t.nullable.list.field('agents', {
+    t.nullable.list.nonNull.field('agents', {
       type: 'Agent',
       args: {},
     })

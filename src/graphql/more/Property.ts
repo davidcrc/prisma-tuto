@@ -1,10 +1,10 @@
 import { objectType } from 'nexus'
 
 export const Property = objectType({
-  name: 'Property',
+  name: "Property",
   definition(t) {
-    t.nonNull.string('businessKey')
-    t.nonNull.string('name')
-    t.nonNull.int('productType')
-  },
+    t.string("businessKey")
+    t.string("name")
+    t.field("productType", { type: 'ProductType' })
+  }
 })
