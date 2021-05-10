@@ -6,7 +6,12 @@ export const State = objectType({
     t.nonNull.int('id')
     t.nonNull.string('name')
     t.nonNull.int('fipsCode')
-    t.field('country', { type: 'Country' })
+    t.field('country', { 
+      type: 'Country',
+      resolve(parent, _, ctx) {
+        return ctx.db.state.findUnique({ where: { id: parent.id } }).Country()
+      },
+    })
 
     //   TODO:
     t.list.nonNull.field('counties', {
@@ -19,6 +24,9 @@ export const State = objectType({
         //   before: stringArg(),
         //   first: intArg(),
         //   last: intArg(),
+      },
+      resolve(parent, _, ctx) {
+        return ctx.db.state.findUnique({ where: { id: parent.id } }).County()
       },
     })
 
@@ -33,6 +41,9 @@ export const State = objectType({
         //   before: stringArg(),
         //   first: intArg(),
         //   last: intArg(),
+      },
+      resolve(parent, _, ctx) {
+        return ctx.db.state.findUnique({ where: { id: parent.id } }).Place()
       },
     })
   },

@@ -8,10 +8,8 @@ export const Place = objectType({
     t.nonNull.int('fipsCode')
     t.field('state', { 
       type: 'State',
-      resolve: (_parent, _args, ctx) => {
-        
-        console.log(_parent)
-        return ctx.db.state.findMany({ where: { state_id: _parent.id }})
+      resolve(parent, _, ctx) {
+        return ctx.db.place.findUnique({ where: { id: parent.id } }).State()
       },
     })
   },

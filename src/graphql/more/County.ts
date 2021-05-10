@@ -6,6 +6,11 @@ export const County = objectType({
     t.nonNull.int('id')
     t.nonNull.string('name')
     t.nonNull.int('fipsCode')
-    t.field('state', { type: 'State' })
+    t.field('state', { 
+      type: 'State',
+      resolve(parent, _, ctx) {
+        return ctx.db.county.findUnique({ where: { id: parent.id } }).State()
+      },
+    })
   },
 })

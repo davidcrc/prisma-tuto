@@ -4,18 +4,24 @@ import * as tipo from "@prisma/client"
 export const Address = objectType({
   name: 'Address',
   definition(t) {
+    t.nonNull.int('id')
     t.nullable.string('city')
 
     t.nullable.field('country', {
       type: 'Country',
-      resolve: (_parent, _args, ctx) => {
-        return ctx.db.country.findMany( { where: { id: _parent.country_id }} )
+      resolve: (parent, _, ctx) => {
+        return ctx.db.address.findUnique({
+          where: { id: parent.id || undefined }
+        }).Country()
       },
     })
     t.nullable.string('countryCode')
 
     t.nullable.field('county', {
       type: 'County',
+      resolve(parent, _, ctx) {
+        return ctx.db.address.findUnique({ where: { id: parent.id } }).County()
+      },
     })
     t.nullable.string('countyCode')
 
@@ -29,9 +35,15 @@ export const Address = objectType({
 
     t.nullable.field('place', {
       type: 'Place',
+      resolve(parent, _, ctx) {
+        return ctx.db.address.findUnique({ where: { id: parent.id } }).Place()
+      },
     })
     t.nullable.field('state', {
       type: 'State',
+      resolve(parent, _, ctx) {
+        return ctx.db.address.findUnique({ where: { id: parent.id } }).State()
+      },
     })
 
     t.nonNull.field('updatedAt', {

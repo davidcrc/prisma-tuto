@@ -11,8 +11,38 @@ export const UserQuery = extendType({
       },
     })
 
+    // get Address by id
+    // t.field('address', {
+    //   type: 'Address',
+    //   args: {
+    //     id: nonNull(intArg())
+    //   },
+    //   resolve(_root, args, ctx) {
+    //     return ctx.db.address.findUnique({
+    //       where: { id: args.id }
+    //     })
+    //   }
+    // })
+    
+
     t.nullable.list.field('leasableUnits', {
       type: 'LeasableUnit',
+      resolve(_root, _args, ctx) {
+        return ctx.db.leasableUnit.findMany();
+      },
+    })
+
+    // get leasableUnits by id
+    t.field('leasableUnit', {
+      type: 'LeasableUnit',
+      args: {
+        id: nonNull(intArg())
+      },
+      resolve(_root, args, ctx) {
+        return ctx.db.leasableUnit.findUnique({
+          where: { id: args.id }
+        })
+      }
     })
 
     t.connectionField('leasableUnitsConnection', {

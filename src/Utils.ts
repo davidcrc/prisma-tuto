@@ -48,7 +48,11 @@ export const findAttachment = async (
   const res = await context.db.activeStorageBlob.findMany({
     where: { id: blob },
   })
-  const key = res
+  
+  let key = ''
+  if (res){
+    key = res[0].key
+  }
 
   return `https://dev-es-core.s3.us-east-2.amazonaws.com/${key}`
 }

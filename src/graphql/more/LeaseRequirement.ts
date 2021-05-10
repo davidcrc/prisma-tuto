@@ -10,7 +10,7 @@ export const LeaseRequirement = objectType({
     //   TODO:
     t.list.nonNull.field('organizations', {
       type: 'Organization',
-      // args: {
+      args: {
       //   where: arg({ type: OrganizationWhereInput }),
       //   orderBy: arg({ type: OrganizationOrderByInput }),
       //   skip: intArg(),
@@ -18,7 +18,10 @@ export const LeaseRequirement = objectType({
       //   before: stringArg(),
       //   first: intArg(),
       //   last: intArg(),
-      // },
+      },
+      resolve(parent, _, ctx) {
+        return ctx.db.leaseRequirement.findUnique({ where: { id: parent.id } }).Organization()
+      },
     })
     t.string('signage')
     t.string('useExpression')

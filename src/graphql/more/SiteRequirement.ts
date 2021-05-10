@@ -19,12 +19,30 @@ export const SiteRequirement = objectType({
         // first: intArg(),
         // last: intArg(),
       },
+      resolve(parent, _, ctx) {
+        return ctx.db.siteRequirement.findUnique({ where: { id: parent.id } }).Organization()
+      },
     })
     t.int("parkingStallsCount")
     t.float("parkingStallsPerSqFt")
-    t.field("productType", { type: 'ProductType' })
-    t.field("propertyCategoryType", { type: 'PropertyCategoryType' })
-    t.field("propertySubCategoryType", { type: 'PropertySubCategoryType' })
+    t.field("productType", { 
+      type: 'ProductType' ,
+      resolve(parent, _, ctx) {
+        return ctx.db.siteRequirement.findUnique({ where: { id: parent.id } }).ProductType()
+      },
+    })
+    t.field("propertyCategoryType", { 
+      type: 'PropertyCategoryType' ,
+      resolve(parent, _, ctx) {
+        return ctx.db.siteRequirement.findUnique({ where: { id: parent.id } }).PropertyCategoryType()
+      },
+    })
+    t.field("propertySubCategoryType", { 
+      type: 'PropertySubCategoryType' ,
+      resolve(parent, _, ctx) {
+        return ctx.db.siteRequirement.findUnique({ where: { id: parent.id } }).PropertySubCategoryType()
+      },
+    })
     t.int("trafficRequirements")
   }
 })

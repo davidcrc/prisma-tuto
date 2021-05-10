@@ -8,6 +8,9 @@ export const Organization = objectType({
     t.nonNull.int('id')
     t.nullable.field('address', {
       type: 'Address',
+      resolve(parent, _, ctx) {
+        return ctx.db.organization.findUnique({ where: { id: parent.id } }).Address()
+      },
     })
     t.nonNull.field('createdAt', {
       type: 'DateTime',
@@ -21,16 +24,28 @@ export const Organization = objectType({
     t.nullable.string('industryCategory')
     t.nullable.string('generalRequirements')
     t.nullable.field('siteRequirement', {
-      type: 'SiteRequirement'
+      type: 'SiteRequirement',
+      resolve(parent, _, ctx) {
+        return ctx.db.organization.findUnique({ where: { id: parent.id } }).SiteRequirement()
+      },
     })
     t.nullable.int('unitRequirement', {
-      type: 'UnitRequirement'
+      type: 'UnitRequirement',
+      resolve(parent, _, ctx) {
+        return ctx.db.organization.findUnique({ where: { id: parent.id } }).UnitRequirement()
+      },
     })
     t.nullable.field('demographicRequirement',{
-      type: 'DemographicRequirement'
+      type: 'DemographicRequirement',
+      resolve(parent, _, ctx) {
+        return ctx.db.organization.findUnique({ where: { id: parent.id } }).DemographicRequirement()
+      },
     })
     t.nullable.field('leaseRequirement', {
-      type: 'LeaseRequirement'
+      type: 'LeaseRequirement',
+      resolve(parent, _, ctx) {
+        return ctx.db.organization.findUnique({ where: { id: parent.id } }).LeaseRequirement()
+      },
     })
     t.nullable.boolean('isBrokerage')    
     t.nullable.string('registeredAgent')
@@ -42,6 +57,9 @@ export const Organization = objectType({
     })
     t.nullable.list.nonNull.field('leasableUnit', {
       type: 'LeasableUnit',
+      resolve(parent, _, ctx) {
+        return ctx.db.organization.findUnique({ where: { id: parent.id } }).LeasableUnit()
+      },
     })
     t.nullable.string('mainPhone')
     t.field('logo', {

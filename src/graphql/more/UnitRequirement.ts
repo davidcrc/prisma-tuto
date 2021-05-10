@@ -24,6 +24,9 @@ export const UnitRequirement = objectType({
         // first: intArg(),
         // last: intArg(),
       },
+      resolve(parent, _, ctx) {
+        return ctx.db.unitRequirement.findUnique({ where: { id: parent.id } }).Organization()
+      },
     })
     t.int("powerServiceAmps")
     t.int("powerServicePhase")

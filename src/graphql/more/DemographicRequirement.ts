@@ -13,7 +13,7 @@ export const DemographicRequirement = objectType({
     //   TODO:
     t.list.nonNull.field('organizations', {
       type: 'Organization',
-      // args: {
+      args: {
       //   where: arg({ type: OrganizationWhereInput }),
       //   orderBy: arg({ type: OrganizationOrderByInput }),
       //   skip: intArg(),
@@ -21,7 +21,10 @@ export const DemographicRequirement = objectType({
       //   before: stringArg(),
       //   first: intArg(),
       //   last: intArg(),
-      // },
+      },
+      resolve(parent, _, ctx) {
+        return ctx.db.demographicRequirement.findUnique({ where: { id: parent.id } }).Organization()
+      },
     })
     t.int('populationCount')
     t.float('populationCountRadiusMiles')

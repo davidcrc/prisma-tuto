@@ -5,7 +5,7 @@ export const Country = objectType({
   definition(t) {
     t.nonNull.int('id')
     t.nonNull.string('name')
-    t.nonNull.string('fipsCode')
+    t.nonNull.list.string('fipsCode')
     t.string('shortCode')
     t.string('longCode')
 
@@ -21,8 +21,8 @@ export const Country = objectType({
           // first: intArg(),
           // last: intArg(),
       },
-      resolve: (_parent, _args, ctx) => {
-        return ctx.db.state.findMany( { where: { country_id: _parent.id }} )
+      resolve(parent , __, ctx) {
+        return ctx.db.country.findUnique({ where: { id: parent.id } }).State()
       },
     })
   },

@@ -6,6 +6,9 @@ export const LeasableUnit = objectType({
   definition(t) {
     t.nullable.field('address', {
       type: 'Address',
+      resolve(parent, _, ctx) {
+        return ctx.db.leasableUnit.findUnique({ where: { id: parent.id } }).Address()
+      },
     })
     t.nullable.string('businessKey')
     t.nullable.boolean('isInPortfolio')
@@ -27,17 +30,29 @@ export const LeasableUnit = objectType({
     t.nullable.string('externalNotes')
     t.nullable.field('productType', {
       type: 'ProductType',
+      resolve(parent, _, ctx) {
+        return ctx.db.leasableUnit.findUnique({ where: { id: parent.id } }).ProductType()
+      },
     })
     t.nullable.field('leasableUnitSubType', {
       type: 'LeasableUnitSubType',
+      resolve(parent, _, ctx) {
+        return ctx.db.leasableUnit.findUnique({ where: { id: parent.id } }).LeasableUnitSubType()
+      },
     })
     t.nullable.field('organization', {
       type: 'Organization',
+      resolve(parent, _, ctx) {
+        return ctx.db.leasableUnit.findUnique({ where: { id: parent.id } }).Organization()
+      },
     })
     // TODO: Args
     t.nullable.list.nonNull.field('agents', {
       type: 'Agent',
       args: {},
+      resolve(parent, _, ctx) {
+        return ctx.db.leasableUnit.findUnique({ where: { id: parent.id } }).Agent()
+      },
     })
 
     t.nullable.field('dateAvailable', {

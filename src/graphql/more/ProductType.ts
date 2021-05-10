@@ -17,6 +17,9 @@ export const ProductType = objectType({
         // first: intArg(),
         // last: intArg(),
       },
+      resolve(parent, _, ctx) {
+        return ctx.db.productType.findUnique({ where: { id: parent.id } }).Property()
+      },
     })
     t.list.nonNull.field("propertyCategoryTypes", {
       type: 'PropertyCategoryType',
@@ -29,6 +32,9 @@ export const ProductType = objectType({
         // first: intArg(),
         // last: intArg(),
       },
+      resolve(parent, _, ctx) {
+        return ctx.db.productType.findUnique({ where: { id: parent.id } }).PropertyCategoryType()
+      },
     })
     t.list.nonNull.field("siteRequirements", {
       type: 'SiteRequirement',
@@ -40,6 +46,9 @@ export const ProductType = objectType({
         // before: stringArg(),
         // first: intArg(),
         // last: intArg(),
+      },
+      resolve(parent, _, ctx) {
+        return ctx.db.productType.findUnique({ where: { id: parent.id } }).SiteRequirement()
       },
     })
     t.nonNull.field("updatedAt", { type: 'DateTime' })

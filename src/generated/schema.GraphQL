@@ -9,6 +9,7 @@ type Address {
   county: County
   countyCode: String
   createdAt: DateTime!
+  id: Int!
   lat: Float
   lineOne: String
   lineTwo: String
@@ -33,7 +34,7 @@ type AuthPayload {
 }
 
 type Country {
-  fipsCode: String!
+  fipsCode: [String]!
   id: Int!
   longCode: String
   name: String!
@@ -242,9 +243,9 @@ type ProductType {
 }
 
 type Property {
-  businessKey: String!
-  name: String!
-  productType: ProductType!
+  businessKey: String
+  name: String
+  productType: ProductType
 }
 
 type PropertyCategoryType {
@@ -270,6 +271,7 @@ type PropertySubCategoryType {
 
 type Query {
   addresses: [Address]
+  leasableUnit(id: Int!): LeasableUnit
   leasableUnits: [LeasableUnit]
   leasableUnitsConnection(
     """Returns the elements in the list that come after the specified cursor"""

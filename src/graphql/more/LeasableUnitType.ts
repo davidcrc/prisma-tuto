@@ -17,12 +17,15 @@ export const LeasableUnitType = objectType({
       //   first: intArg(),
       //   last: intArg(),
       // },
+      resolve(parent, _, ctx) {
+        return ctx.db.leasableUnitType.findUnique({ where: { id: parent.id } }).LeasableUnit()
+      },
     })
 
     //   TODO:
     t.list.nonNull.field('leasableUnitSubTypes', {
       type: 'LeasableUnitSubType',
-      // args: {
+      args: {
       //   where: arg({ type: LeasableUnitSubTypeWhereInput }),
       //   orderBy: arg({ type: LeasableUnitSubTypeOrderByInput }),
       //   skip: intArg(),
@@ -30,7 +33,10 @@ export const LeasableUnitType = objectType({
       //   before: stringArg(),
       //   first: intArg(),
       //   last: intArg(),
-      // },
+      },
+      resolve(parent, _, ctx) {
+        return ctx.db.leasableUnitType.findUnique({ where: { id: parent.id } }).LeasableUnitSubType()
+      },
     })
     t.string('name')
     t.nonNull.field('updatedAt', { type: 'DateTime' })
