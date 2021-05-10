@@ -79,15 +79,6 @@ export interface NexusGenObjects {
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
   }
-  Company: { // root type
-    bio?: string | null; // String
-    contactPerson?: string | null; // String
-    email?: string | null; // String
-    id: number; // Int!
-    name?: string | null; // String
-    roleId?: number | null; // Int
-    website?: string | null; // String
-  }
   Country: { // root type
     fipsCode: string; // String!
     id: number; // Int!
@@ -230,10 +221,6 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Query: {};
-  Role: { // root type
-    id: number; // Int!
-    name?: string | null; // String
-  }
   SiteRequirement: { // root type
     accessRequirements?: string | null; // String
     id: number; // Int!
@@ -247,10 +234,6 @@ export interface NexusGenObjects {
     propertyCategoryType?: NexusGenRootTypes['PropertyCategoryType'] | null; // PropertyCategoryType
     propertySubCategoryType?: NexusGenRootTypes['PropertySubCategoryType'] | null; // PropertySubCategoryType
     trafficRequirements?: number | null; // Int
-  }
-  Skill: { // root type
-    id: number; // Int!
-    name?: string | null; // String
   }
   State: { // root type
     counties?: NexusGenRootTypes['County'][] | null; // [County!]
@@ -317,16 +300,6 @@ export interface NexusGenFieldTypes {
   AuthPayload: { // field return type
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
-  }
-  Company: { // field return type
-    bio: string | null; // String
-    contactPerson: string | null; // String
-    email: string | null; // String
-    id: number; // Int!
-    name: string | null; // String
-    roleId: number | null; // Int
-    roles: NexusGenRootTypes['Role'][]; // [Role!]!
-    website: string | null; // String
   }
   Country: { // field return type
     fipsCode: string; // String!
@@ -486,12 +459,6 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
     organizations: NexusGenRootTypes['OrganizationConnection'] | null; // OrganizationConnection
   }
-  Role: { // field return type
-    company: NexusGenRootTypes['Company'] | null; // Company
-    id: number; // Int!
-    name: string | null; // String
-    skills: Array<NexusGenRootTypes['Skill'] | null> | null; // [Skill]
-  }
   SiteRequirement: { // field return type
     accessRequirements: string | null; // String
     id: number; // Int!
@@ -505,11 +472,6 @@ export interface NexusGenFieldTypes {
     propertyCategoryType: NexusGenRootTypes['PropertyCategoryType'] | null; // PropertyCategoryType
     propertySubCategoryType: NexusGenRootTypes['PropertySubCategoryType'] | null; // PropertySubCategoryType
     trafficRequirements: number | null; // Int
-  }
-  Skill: { // field return type
-    id: number; // Int!
-    name: string | null; // String
-    role: NexusGenRootTypes['Role'] | null; // Role
   }
   State: { // field return type
     counties: NexusGenRootTypes['County'][] | null; // [County!]
@@ -566,16 +528,6 @@ export interface NexusGenFieldTypeNames {
   AuthPayload: { // field return type name
     token: 'String'
     user: 'User'
-  }
-  Company: { // field return type name
-    bio: 'String'
-    contactPerson: 'String'
-    email: 'String'
-    id: 'Int'
-    name: 'String'
-    roleId: 'Int'
-    roles: 'Role'
-    website: 'String'
   }
   Country: { // field return type name
     fipsCode: 'String'
@@ -735,12 +687,6 @@ export interface NexusGenFieldTypeNames {
     me: 'User'
     organizations: 'OrganizationConnection'
   }
-  Role: { // field return type name
-    company: 'Company'
-    id: 'Int'
-    name: 'String'
-    skills: 'Skill'
-  }
   SiteRequirement: { // field return type name
     accessRequirements: 'String'
     id: 'Int'
@@ -754,11 +700,6 @@ export interface NexusGenFieldTypeNames {
     propertyCategoryType: 'PropertyCategoryType'
     propertySubCategoryType: 'PropertySubCategoryType'
     trafficRequirements: 'Int'
-  }
-  Skill: { // field return type name
-    id: 'Int'
-    name: 'String'
-    role: 'Role'
   }
   State: { // field return type name
     counties: 'County'

@@ -32,17 +32,6 @@ type AuthPayload {
   user: User
 }
 
-type Company {
-  bio: String
-  contactPerson: String
-  email: String
-  id: Int!
-  name: String
-  roleId: Int
-  roles: [Role!]!
-  website: String
-}
-
 type Country {
   fipsCode: String!
   id: Int!
@@ -286,13 +275,6 @@ type Query {
   ): OrganizationConnection
 }
 
-type Role {
-  company: Company
-  id: Int!
-  name: String
-  skills: [Skill]
-}
-
 type SiteRequirement {
   accessRequirements: String
   id: Int!
@@ -306,12 +288,6 @@ type SiteRequirement {
   propertyCategoryType: PropertyCategoryType
   propertySubCategoryType: PropertySubCategoryType
   trafficRequirements: Int
-}
-
-type Skill {
-  id: Int!
-  name: String
-  role: Role
 }
 
 type State {
