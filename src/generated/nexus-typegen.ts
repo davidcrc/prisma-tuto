@@ -14,6 +14,9 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  RoleInputType: { // input type
+    id: number; // Int!
+  }
 }
 
 export interface NexusGenEnums {
@@ -72,6 +75,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createCompany: NexusGenRootTypes['Company']; // Company!
+    createRole: NexusGenRootTypes['Company']; // Company!
     deleteCompany: NexusGenRootTypes['Company'] | null; // Company
     updateCompany: NexusGenRootTypes['Company'] | null; // Company
   }
@@ -106,6 +110,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createCompany: 'Company'
+    createRole: 'Company'
     deleteCompany: 'Company'
     updateCompany: 'Company'
   }
@@ -136,7 +141,12 @@ export interface NexusGenArgTypes {
       id?: number | null; // Int
       name: string; // String!
       roleId?: number | null; // Int
+      roles?: Array<NexusGenInputs['RoleInputType'] | null> | null; // [RoleInputType]
       website: string; // String!
+    }
+    createRole: { // args
+      name: string; // String!
+      skillId?: number | null; // Int
     }
     deleteCompany: { // args
       id: number; // Int!
@@ -148,6 +158,7 @@ export interface NexusGenArgTypes {
       id: number; // Int!
       name?: string | null; // String
       roleId?: number | null; // Int
+      roles?: Array<NexusGenInputs['RoleInputType'] | null> | null; // [RoleInputType]
       website?: string | null; // String
     }
   }
@@ -166,7 +177,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 
