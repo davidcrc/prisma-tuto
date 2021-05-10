@@ -3,9 +3,9 @@ import { arg, intArg, objectType, stringArg } from 'nexus'
 export const Country = objectType({
   name: 'Country',
   definition(t) {
-    t.nullable.int('id')
-    t.nullable.string('name')
-    t.nullable.string('fipsCode')
+    t.nonNull.int('id')
+    t.nonNull.string('name')
+    t.nonNull.string('fipsCode')
     t.string('shortCode')
     t.string('longCode')
 

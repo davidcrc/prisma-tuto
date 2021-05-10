@@ -3,22 +3,22 @@ import { objectType } from 'nexus'
 export const ProductType = objectType({
   name: 'ProductType',
   definition(t) {
-    t.nullable.int('id')
-    t.nullable.string('name')
-    t.nullable.field('createdAt', {
+    t.nonNull.int('id')
+    t.nonNull.field('createdAt', {
       type: 'DateTime',
     })
-    t.nullable.field('updatedAt', {
-      type: 'DateTime',
-    })
-    t.nullable.list.field('LeasableUnit', {
-      type: 'LeasableUnit',
-    })
-    // t.nullable.string('product_specializations')
-    t.nullable.list.field('Property', {
+    t.nonNull.string('name')
+    t.nullable.list.field('properties', {
       type: 'Property',
     })
-    // t.nullable.string('PropertyCategoryType')
-    t.nullable.string('SiteRequirement')
+    // t.nonNull.list.field('propertyCategoryTypes', {
+    //   type: 'PropertyCategoryType'
+    // })
+    // t.nonNull.list.field('siteRequirements', {
+    //   type: 'SiteRequirement'
+    // })
+    t.nonNull.field('updatedAt', {
+      type: 'DateTime',
+    })
   },
 })

@@ -55,12 +55,16 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   Address: { // root type
     city?: string | null; // String
+    countryCode?: string | null; // String
+    county?: NexusGenRootTypes['County'] | null; // County
     countyCode?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     lat?: number | null; // Float
     lineOne?: string | null; // String
     lineTwo?: string | null; // String
     lng?: number | null; // Float
+    place?: NexusGenRootTypes['Place'] | null; // Place
+    state?: NexusGenRootTypes['State'] | null; // State
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     zip?: string | null; // String
   }
@@ -85,10 +89,10 @@ export interface NexusGenObjects {
     website?: string | null; // String
   }
   Country: { // root type
-    fipsCode?: string | null; // String
-    id?: number | null; // Int
+    fipsCode: string; // String!
+    id: number; // Int!
     longCode?: string | null; // String
-    name?: string | null; // String
+    name: string; // String!
     shortCode?: string | null; // String
   }
   County: { // root type
@@ -195,23 +199,54 @@ export interface NexusGenObjects {
     name: string; // String!
   }
   ProductType: { // root type
-    LeasableUnit?: Array<NexusGenRootTypes['LeasableUnit'] | null> | null; // [LeasableUnit]
-    Property?: Array<NexusGenRootTypes['Property'] | null> | null; // [Property]
-    SiteRequirement?: string | null; // String
-    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
-    id?: number | null; // Int
-    name?: string | null; // String
-    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    name: string; // String!
+    properties?: Array<NexusGenRootTypes['Property'] | null> | null; // [Property]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Property: { // root type
     businessKey: string; // String!
     name: string; // String!
     productType: number; // Int!
   }
+  PropertyCategoryType: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    name: string; // String!
+    productType?: NexusGenRootTypes['ProductType'] | null; // ProductType
+    properties?: NexusGenRootTypes['Property'][] | null; // [Property!]
+    propertySubCategoryTypes?: NexusGenRootTypes['PropertySubCategoryType'][] | null; // [PropertySubCategoryType!]
+    siteRequirements?: NexusGenRootTypes['SiteRequirement'][] | null; // [SiteRequirement!]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  PropertySubCategoryType: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    name: string; // String!
+    properties?: NexusGenRootTypes['Property'][] | null; // [Property!]
+    propertyCategoryType?: NexusGenRootTypes['PropertyCategoryType'] | null; // PropertyCategoryType
+    siteRequirements?: NexusGenRootTypes['SiteRequirement'][] | null; // [SiteRequirement!]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Query: {};
   Role: { // root type
     id: number; // Int!
     name?: string | null; // String
+  }
+  SiteRequirement: { // root type
+    accessRequirements?: string | null; // String
+    id: number; // Int!
+    landAverageAcres?: number | null; // Float
+    landMaxAcres?: number | null; // Float
+    landMinAcres?: number | null; // Float
+    organizations?: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    parkingStallsCount?: number | null; // Int
+    parkingStallsPerSqFt?: number | null; // Float
+    productType?: NexusGenRootTypes['ProductType'] | null; // ProductType
+    propertyCategoryType?: NexusGenRootTypes['PropertyCategoryType'] | null; // PropertyCategoryType
+    propertySubCategoryType?: NexusGenRootTypes['PropertySubCategoryType'] | null; // PropertySubCategoryType
+    trafficRequirements?: number | null; // Int
   }
   Skill: { // root type
     id: number; // Int!
@@ -259,12 +294,16 @@ export interface NexusGenFieldTypes {
   Address: { // field return type
     city: string | null; // String
     country: NexusGenRootTypes['Country'] | null; // Country
+    countryCode: string | null; // String
+    county: NexusGenRootTypes['County'] | null; // County
     countyCode: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     lat: number | null; // Float
     lineOne: string | null; // String
     lineTwo: string | null; // String
     lng: number | null; // Float
+    place: NexusGenRootTypes['Place'] | null; // Place
+    state: NexusGenRootTypes['State'] | null; // State
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     zip: string | null; // String
   }
@@ -290,10 +329,10 @@ export interface NexusGenFieldTypes {
     website: string | null; // String
   }
   Country: { // field return type
-    fipsCode: string | null; // String
-    id: number | null; // Int
+    fipsCode: string; // String!
+    id: number; // Int!
     longCode: string | null; // String
-    name: string | null; // String
+    name: string; // String!
     shortCode: string | null; // String
     states: NexusGenRootTypes['State'][] | null; // [State!]
   }
@@ -410,18 +449,35 @@ export interface NexusGenFieldTypes {
     state: NexusGenRootTypes['State'] | null; // State
   }
   ProductType: { // field return type
-    LeasableUnit: Array<NexusGenRootTypes['LeasableUnit'] | null> | null; // [LeasableUnit]
-    Property: Array<NexusGenRootTypes['Property'] | null> | null; // [Property]
-    SiteRequirement: string | null; // String
-    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
-    id: number | null; // Int
-    name: string | null; // String
-    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    name: string; // String!
+    properties: Array<NexusGenRootTypes['Property'] | null> | null; // [Property]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Property: { // field return type
     businessKey: string; // String!
     name: string; // String!
     productType: number; // Int!
+  }
+  PropertyCategoryType: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    name: string; // String!
+    productType: NexusGenRootTypes['ProductType'] | null; // ProductType
+    properties: NexusGenRootTypes['Property'][] | null; // [Property!]
+    propertySubCategoryTypes: NexusGenRootTypes['PropertySubCategoryType'][] | null; // [PropertySubCategoryType!]
+    siteRequirements: NexusGenRootTypes['SiteRequirement'][] | null; // [SiteRequirement!]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  PropertySubCategoryType: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    name: string; // String!
+    properties: NexusGenRootTypes['Property'][] | null; // [Property!]
+    propertyCategoryType: NexusGenRootTypes['PropertyCategoryType'] | null; // PropertyCategoryType
+    siteRequirements: NexusGenRootTypes['SiteRequirement'][] | null; // [SiteRequirement!]
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Query: { // field return type
     addresses: Array<NexusGenRootTypes['Address'] | null> | null; // [Address]
@@ -435,6 +491,20 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     name: string | null; // String
     skills: Array<NexusGenRootTypes['Skill'] | null> | null; // [Skill]
+  }
+  SiteRequirement: { // field return type
+    accessRequirements: string | null; // String
+    id: number; // Int!
+    landAverageAcres: number | null; // Float
+    landMaxAcres: number | null; // Float
+    landMinAcres: number | null; // Float
+    organizations: NexusGenRootTypes['Organization'][] | null; // [Organization!]
+    parkingStallsCount: number | null; // Int
+    parkingStallsPerSqFt: number | null; // Float
+    productType: NexusGenRootTypes['ProductType'] | null; // ProductType
+    propertyCategoryType: NexusGenRootTypes['PropertyCategoryType'] | null; // PropertyCategoryType
+    propertySubCategoryType: NexusGenRootTypes['PropertySubCategoryType'] | null; // PropertySubCategoryType
+    trafficRequirements: number | null; // Int
   }
   Skill: { // field return type
     id: number; // Int!
@@ -473,12 +543,16 @@ export interface NexusGenFieldTypeNames {
   Address: { // field return type name
     city: 'String'
     country: 'Country'
+    countryCode: 'String'
+    county: 'County'
     countyCode: 'String'
     createdAt: 'DateTime'
     lat: 'Float'
     lineOne: 'String'
     lineTwo: 'String'
     lng: 'Float'
+    place: 'Place'
+    state: 'State'
     updatedAt: 'DateTime'
     zip: 'String'
   }
@@ -624,18 +698,35 @@ export interface NexusGenFieldTypeNames {
     state: 'State'
   }
   ProductType: { // field return type name
-    LeasableUnit: 'LeasableUnit'
-    Property: 'Property'
-    SiteRequirement: 'String'
     createdAt: 'DateTime'
     id: 'Int'
     name: 'String'
+    properties: 'Property'
     updatedAt: 'DateTime'
   }
   Property: { // field return type name
     businessKey: 'String'
     name: 'String'
     productType: 'Int'
+  }
+  PropertyCategoryType: { // field return type name
+    createdAt: 'DateTime'
+    id: 'Int'
+    name: 'String'
+    productType: 'ProductType'
+    properties: 'Property'
+    propertySubCategoryTypes: 'PropertySubCategoryType'
+    siteRequirements: 'SiteRequirement'
+    updatedAt: 'DateTime'
+  }
+  PropertySubCategoryType: { // field return type name
+    createdAt: 'DateTime'
+    id: 'Int'
+    name: 'String'
+    properties: 'Property'
+    propertyCategoryType: 'PropertyCategoryType'
+    siteRequirements: 'SiteRequirement'
+    updatedAt: 'DateTime'
   }
   Query: { // field return type name
     addresses: 'Address'
@@ -649,6 +740,20 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     name: 'String'
     skills: 'Skill'
+  }
+  SiteRequirement: { // field return type name
+    accessRequirements: 'String'
+    id: 'Int'
+    landAverageAcres: 'Float'
+    landMaxAcres: 'Float'
+    landMinAcres: 'Float'
+    organizations: 'Organization'
+    parkingStallsCount: 'Int'
+    parkingStallsPerSqFt: 'Float'
+    productType: 'ProductType'
+    propertyCategoryType: 'PropertyCategoryType'
+    propertySubCategoryType: 'PropertySubCategoryType'
+    trafficRequirements: 'Int'
   }
   Skill: { // field return type name
     id: 'Int'

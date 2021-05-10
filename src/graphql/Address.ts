@@ -12,11 +12,11 @@ export const Address = objectType({
         return ctx.db.country.findMany( { where: { id: _parent.country_id }} )
       },
     })
-    // t.nullable.string('countryCode')
+    t.nullable.string('countryCode')
 
-    // t.nullable.field('county', {
-    //   type: 'County',
-    // })
+    t.nullable.field('county', {
+      type: 'County',
+    })
     t.nullable.string('countyCode')
 
     t.nonNull.field('createdAt', {
@@ -27,12 +27,12 @@ export const Address = objectType({
     t.nullable.string('lineTwo')
     t.nullable.float('lng')
 
-    // t.nullable.field('place', {
-    //   type: 'Place',
-    // })
-    // t.nullable.field('state', {
-    //   type: 'State',
-    // })
+    t.nullable.field('place', {
+      type: 'Place',
+    })
+    t.nullable.field('state', {
+      type: 'State',
+    })
 
     t.nonNull.field('updatedAt', {
       type: 'DateTime',

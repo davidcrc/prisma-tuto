@@ -5,12 +5,16 @@
 type Address {
   city: String
   country: Country
+  countryCode: String
+  county: County
   countyCode: String
   createdAt: DateTime!
   lat: Float
   lineOne: String
   lineTwo: String
   lng: Float
+  place: Place
+  state: State
   updatedAt: DateTime!
   zip: String
 }
@@ -40,10 +44,10 @@ type Company {
 }
 
 type Country {
-  fipsCode: String
-  id: Int
+  fipsCode: String!
+  id: Int!
   longCode: String
-  name: String
+  name: String!
   shortCode: String
   states: [State!]
 }
@@ -216,19 +220,38 @@ type Place {
 }
 
 type ProductType {
-  LeasableUnit: [LeasableUnit]
-  Property: [Property]
-  SiteRequirement: String
-  createdAt: DateTime
-  id: Int
-  name: String
-  updatedAt: DateTime
+  createdAt: DateTime!
+  id: Int!
+  name: String!
+  properties: [Property]
+  updatedAt: DateTime!
 }
 
 type Property {
   businessKey: String!
   name: String!
   productType: Int!
+}
+
+type PropertyCategoryType {
+  createdAt: DateTime!
+  id: Int!
+  name: String!
+  productType: ProductType
+  properties: [Property!]
+  propertySubCategoryTypes: [PropertySubCategoryType!]
+  siteRequirements: [SiteRequirement!]
+  updatedAt: DateTime!
+}
+
+type PropertySubCategoryType {
+  createdAt: DateTime!
+  id: Int!
+  name: String!
+  properties: [Property!]
+  propertyCategoryType: PropertyCategoryType
+  siteRequirements: [SiteRequirement!]
+  updatedAt: DateTime!
 }
 
 type Query {
@@ -268,6 +291,21 @@ type Role {
   id: Int!
   name: String
   skills: [Skill]
+}
+
+type SiteRequirement {
+  accessRequirements: String
+  id: Int!
+  landAverageAcres: Float
+  landMaxAcres: Float
+  landMinAcres: Float
+  organizations: [Organization!]
+  parkingStallsCount: Int
+  parkingStallsPerSqFt: Float
+  productType: ProductType
+  propertyCategoryType: PropertyCategoryType
+  propertySubCategoryType: PropertySubCategoryType
+  trafficRequirements: Int
 }
 
 type Skill {
