@@ -1,6 +1,5 @@
 import { objectType } from 'nexus'
-
-// import { findAttachment } from '../utils'
+import { findAttachment } from '../Utils'
 
 export const User = objectType({
   name: 'User',
@@ -16,7 +15,10 @@ export const User = objectType({
 
     //
     t.nullable.field('organization', {
-      type: 'Int',
+      type: 'Organization',
+      resolve(parent, _, ctx) {
+        return ctx.db.user.findUnique({ where: { id: parent.id } }).Organization()
+      },
     })
 
     t.nullable.boolean('isBroker')
@@ -32,9 +34,9 @@ export const User = objectType({
 
     t.field('picture', {
       type: 'String',
-      // resolve: async (parent, args, ctx) => {
-      //   return await findAttachment(ctx, parent.id, 'photo', 'User')
-      // },
+      resolve: async (parent, args, ctx) => {
+        return await findAttachment(ctx, parent.id, 'photo', 'User')
+      },
     })
   },
 })

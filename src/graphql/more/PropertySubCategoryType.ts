@@ -17,6 +17,9 @@ export const PropertySubCategoryType = objectType({
         // first: intArg(),
         // last: intArg(),
       },
+      resolve(parent , __, ctx) {
+        return ctx.db.propertySubCategoryType.findUnique({ where: { id: parent.id } }).Property()
+      },
     })
     t.field("propertyCategoryType", { type: 'PropertyCategoryType' })
     t.list.nonNull.field("siteRequirements", {
@@ -29,6 +32,9 @@ export const PropertySubCategoryType = objectType({
         // before: stringArg(),
         // first: intArg(),
         // last: intArg(),
+      },
+      resolve(parent , __, ctx) {
+        return ctx.db.propertySubCategoryType.findUnique({ where: { id: parent.id } }).SiteRequirement()
       },
     })
     t.nonNull.field("updatedAt", { type: 'DateTime' })

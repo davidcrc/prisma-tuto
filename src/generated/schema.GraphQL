@@ -359,7 +359,7 @@ type User {
   isBroker: Boolean
   lastName: String
   officePhone: String
-  organization: Int
+  organization: Organization
   personType: Int
   picture: String
   primaryCellPhone: String

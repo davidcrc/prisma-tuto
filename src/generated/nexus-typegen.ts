@@ -69,9 +69,7 @@ export interface NexusGenObjects {
   Agent: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: number; // Int!
-    leasableUnit?: NexusGenRootTypes['LeasableUnit'] | null; // LeasableUnit
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    user?: NexusGenRootTypes['User'] | null; // User
   }
   AuthPayload: { // root type
     token?: string | null; // String
@@ -210,9 +208,7 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: number; // Int!
     name: string; // String!
-    properties?: NexusGenRootTypes['Property'][] | null; // [Property!]
     propertyCategoryType?: NexusGenRootTypes['PropertyCategoryType'] | null; // PropertyCategoryType
-    siteRequirements?: NexusGenRootTypes['SiteRequirement'][] | null; // [SiteRequirement!]
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Query: {};
@@ -262,9 +258,7 @@ export interface NexusGenObjects {
     isBroker?: boolean | null; // Boolean
     lastName?: string | null; // String
     officePhone?: string | null; // String
-    organization?: number | null; // Int
     personType?: number | null; // Int
-    picture?: string | null; // String
     primaryCellPhone?: string | null; // String
     signInCount?: number | null; // Int
   }
@@ -545,7 +539,7 @@ export interface NexusGenFieldTypes {
     isBroker: boolean | null; // Boolean
     lastName: string | null; // String
     officePhone: string | null; // String
-    organization: number | null; // Int
+    organization: NexusGenRootTypes['Organization'] | null; // Organization
     personType: number | null; // Int
     picture: string | null; // String
     primaryCellPhone: string | null; // String
@@ -818,7 +812,7 @@ export interface NexusGenFieldTypeNames {
     isBroker: 'Boolean'
     lastName: 'String'
     officePhone: 'String'
-    organization: 'Int'
+    organization: 'Organization'
     personType: 'Int'
     picture: 'String'
     primaryCellPhone: 'String'

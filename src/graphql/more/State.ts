@@ -1,4 +1,4 @@
-import { objectType } from 'nexus'
+import { arg, objectType } from 'nexus'
 
 export const State = objectType({
   name: 'State',
@@ -34,7 +34,7 @@ export const State = objectType({
     t.list.nonNull.field('places', {
       type: 'Place',
       args: {
-        //   where: arg({ type: PlaceWhereInput }),
+          // where: arg({ type: 'PlaceWhereInput' }),
         //   orderBy: arg({ type: PlaceOrderByInput }),
         //   skip: intArg(),
         //   after: stringArg(),
