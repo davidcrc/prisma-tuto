@@ -7,7 +7,7 @@ export const LeasableUnit = objectType({
     t.nullable.field('address', {
       type: 'Address',
       resolve(parent, _, ctx) {
-        return ctx.prisma.leasableUnit
+        return ctx.db.leasableUnit
           .findUnique({ where: { id: parent.id } })
           .Address()
       },
@@ -33,7 +33,7 @@ export const LeasableUnit = objectType({
     t.nullable.field('productType', {
       type: 'ProductType',
       resolve(parent, _, ctx) {
-        return ctx.prisma.leasableUnit
+        return ctx.db.leasableUnit
           .findUnique({ where: { id: parent.id } })
           .ProductType()
       },
@@ -41,7 +41,7 @@ export const LeasableUnit = objectType({
     t.nullable.field('leasableUnitSubType', {
       type: 'LeasableUnitSubType',
       resolve(parent, _, ctx) {
-        return ctx.prisma.leasableUnit
+        return ctx.db.leasableUnit
           .findUnique({ where: { id: parent.id } })
           .LeasableUnitSubType()
       },
@@ -49,7 +49,7 @@ export const LeasableUnit = objectType({
     t.nullable.field('organization', {
       type: 'Organization',
       resolve(parent, _, ctx) {
-        return ctx.prisma.leasableUnit
+        return ctx.db.leasableUnit
           .findUnique({ where: { id: parent.id } })
           .Organization()
       },
@@ -59,7 +59,7 @@ export const LeasableUnit = objectType({
       type: 'Agent',
       args: {},
       resolve(parent, _, ctx) {
-        return ctx.prisma.leasableUnit
+        return ctx.db.leasableUnit
           .findUnique({ where: { id: parent.id } })
           .Agent()
       },
