@@ -99,7 +99,7 @@ export interface NexusGenObjects {
     populationCountRadiusMiles?: number | null; // Float
   }
   LeasableUnit: { // root type
-    baseRent?: number | null; // Float
+    baseRent?: string | null; // String
     businessKey?: string | null; // String
     ceilingHeightInches?: number | null; // Int
     dateAvailable?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -113,13 +113,13 @@ export interface NexusGenObjects {
     isListed: boolean; // Boolean!
     monthlyCost?: number | null; // Float
     name?: string | null; // String
-    nnnRent?: number | null; // Float
+    nnnRent?: string | null; // String
     occupancyStatus?: number | null; // Int
     renderUrl?: string | null; // String
     squareFeet?: number | null; // Int
     squareFeetIsEstimate?: boolean | null; // Boolean
     squareFootCost?: number | null; // Float
-    totalRent?: number | null; // Float
+    totalRent?: string | null; // String
   }
   LeasableUnitConnection: { // root type
     edges?: Array<NexusGenRootTypes['LeasableUnitEdge'] | null> | null; // [LeasableUnitEdge]
@@ -332,7 +332,7 @@ export interface NexusGenFieldTypes {
   LeasableUnit: { // field return type
     address: NexusGenRootTypes['Address'] | null; // Address
     agents: NexusGenRootTypes['Agent'][] | null; // [Agent!]
-    baseRent: number | null; // Float
+    baseRent: string | null; // String
     businessKey: string | null; // String
     ceilingHeightInches: number | null; // Int
     dateAvailable: NexusGenScalars['DateTime'] | null; // DateTime
@@ -349,7 +349,7 @@ export interface NexusGenFieldTypes {
     leasableUnitSubType: NexusGenRootTypes['LeasableUnitSubType'] | null; // LeasableUnitSubType
     monthlyCost: number | null; // Float
     name: string | null; // String
-    nnnRent: number | null; // Float
+    nnnRent: string | null; // String
     occupancyStatus: number | null; // Int
     organization: NexusGenRootTypes['Organization'] | null; // Organization
     plan: string | null; // String
@@ -358,7 +358,7 @@ export interface NexusGenFieldTypes {
     squareFeet: number | null; // Int
     squareFeetIsEstimate: boolean | null; // Boolean
     squareFootCost: number | null; // Float
-    totalRent: number | null; // Float
+    totalRent: string | null; // String
   }
   LeasableUnitConnection: { // field return type
     edges: Array<NexusGenRootTypes['LeasableUnitEdge'] | null> | null; // [LeasableUnitEdge]
@@ -479,10 +479,10 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     addresses: Array<NexusGenRootTypes['Address'] | null> | null; // [Address]
-    leasableUnit: NexusGenRootTypes['LeasableUnit'] | null; // LeasableUnit
     leasableUnits: Array<NexusGenRootTypes['LeasableUnit'] | null> | null; // [LeasableUnit]
     leasableUnitsConnection: NexusGenRootTypes['LeasableUnitConnection'] | null; // LeasableUnitConnection
     me: NexusGenRootTypes['User'] | null; // User
+    org: NexusGenRootTypes['Organization'] | null; // Organization
     organizations: NexusGenRootTypes['OrganizationConnection'] | null; // OrganizationConnection
   }
   SiteRequirement: { // field return type
@@ -605,7 +605,7 @@ export interface NexusGenFieldTypeNames {
   LeasableUnit: { // field return type name
     address: 'Address'
     agents: 'Agent'
-    baseRent: 'Float'
+    baseRent: 'String'
     businessKey: 'String'
     ceilingHeightInches: 'Int'
     dateAvailable: 'DateTime'
@@ -622,7 +622,7 @@ export interface NexusGenFieldTypeNames {
     leasableUnitSubType: 'LeasableUnitSubType'
     monthlyCost: 'Float'
     name: 'String'
-    nnnRent: 'Float'
+    nnnRent: 'String'
     occupancyStatus: 'Int'
     organization: 'Organization'
     plan: 'String'
@@ -631,7 +631,7 @@ export interface NexusGenFieldTypeNames {
     squareFeet: 'Int'
     squareFeetIsEstimate: 'Boolean'
     squareFootCost: 'Float'
-    totalRent: 'Float'
+    totalRent: 'String'
   }
   LeasableUnitConnection: { // field return type name
     edges: 'LeasableUnitEdge'
@@ -752,10 +752,10 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     addresses: 'Address'
-    leasableUnit: 'LeasableUnit'
     leasableUnits: 'LeasableUnit'
     leasableUnitsConnection: 'LeasableUnitConnection'
     me: 'User'
+    org: 'Organization'
     organizations: 'OrganizationConnection'
   }
   SiteRequirement: { // field return type name
@@ -836,14 +836,14 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    leasableUnit: { // args
-      id: number; // Int!
-    }
     leasableUnitsConnection: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
       last?: number | null; // Int
+    }
+    org: { // args
+      id?: number | null; // Int
     }
     organizations: { // args
       after?: string | null; // String

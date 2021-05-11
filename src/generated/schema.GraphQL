@@ -70,7 +70,7 @@ type DemographicRequirement {
 type LeasableUnit {
   address: Address
   agents: [Agent!]
-  baseRent: Float
+  baseRent: String
   businessKey: String
   ceilingHeightInches: Int
   dateAvailable: DateTime
@@ -87,7 +87,7 @@ type LeasableUnit {
   leasableUnitSubType: LeasableUnitSubType
   monthlyCost: Float
   name: String
-  nnnRent: Float
+  nnnRent: String
   occupancyStatus: Int
   organization: Organization
   plan: String
@@ -96,7 +96,7 @@ type LeasableUnit {
   squareFeet: Int
   squareFeetIsEstimate: Boolean
   squareFootCost: Float
-  totalRent: Float
+  totalRent: String
 }
 
 type LeasableUnitConnection {
@@ -271,7 +271,6 @@ type PropertySubCategoryType {
 
 type Query {
   addresses: [Address]
-  leasableUnit(id: Int!): LeasableUnit
   leasableUnits: [LeasableUnit]
   leasableUnitsConnection(
     """Returns the elements in the list that come after the specified cursor"""
@@ -287,6 +286,7 @@ type Query {
     last: Int
   ): LeasableUnitConnection
   me: User
+  org(id: Int): Organization
   organizations(
     """Returns the elements in the list that come after the specified cursor"""
     after: String
